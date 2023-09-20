@@ -2,8 +2,9 @@
 flutter vscode で実行できるようにするやつ
 Live Server　共同作業をするためのもの
 Live Share　共同作業をするためのもの
-
+https://zenn.dev/hagakun_dev/articles/2f2eb65b892bea
 fluter導入方法
 https://codezine.jp/article/detail/15981]
 https://www.sejuku.net/blog/124410
 https://qiita.com/apricotcomic/items/7ff53950e10fcff212d2
+https://massu-engineer.com/flutter-vscode-emulator/#VSCodeAndroid
