@@ -7,7 +7,8 @@ fluter概要
 https://www.sejuku.net/blog/124410
 flutterの導入方法
 https://qiita.com/apricotcomic/items/7ff53950e10fcff212d2
-
+flutter学習
+https://qiita.com/flutter_daisuki/items/b67ed0512dbca97738bd
 android-studioのインストールの仕方
 https://codezine.jp/article/detail/15981
 android-studioの使い方
