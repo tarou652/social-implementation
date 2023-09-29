@@ -13,6 +13,9 @@ android-studioのインストールの仕方
 https://codezine.jp/article/detail/15981
 android-studioの使い方
 https://massu-engineer.com/flutter-vscode-emulator/#VSCodeAndroid
+vscode ホットリロード
+https://qiita.com/YumaInaura/items/24c308fa3a1c46598f54
+＋@category:debuggers 'Plain Text'　拡張機能
 必要なもの
 android-stdio
 flutter
