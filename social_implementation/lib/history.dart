@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:SI/components/header.dart';
 
 void main() {
-  runApp(Myapp());
+  runApp(HistoryPage());
 }
 
-class Myapp extends StatelessWidget {
+class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), 
-       bottomNavigationBar:Footer(currentIndex: 1,context: context,),
+       bottomNavigationBar:Footer(currentIndex: 1,context: context),
       
     );
 

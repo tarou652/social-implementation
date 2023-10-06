@@ -1,0 +1,103 @@
+import 'package:SI/history.dart';
+import 'package:SI/main.dart';
+import 'package:flutter/material.dart';
+import 'package:SI/help.dart';
+import 'package:SI/setting.dart';
+
+class Footer extends StatelessWidget implements PreferredSizeWidget {
+  final int currentIndex;
+   final BuildContext context;
+  Footer({required this.currentIndex,required this.context});
+  @override
+  Widget build(BuildContext context) {
+      return BottomNavigationBar(
+        currentIndex: currentIndex,
+         onTap: (int index) {
+        // インデックスに基づいて画面を遷移する
+        if (index == 0) {
+          // 録音画面に遷移
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Myapp(),
+            ),
+          );
+        } else if (index == 1) {
+          // 設定画面に遷移
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SettingPage(),
+            ),
+          );
+        } else if (index == 2) {
+          // 履歴画面に遷移
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HistoryPage(),
+            ),
+          );
+        } else if (index == 3) {
+          // ヘルプ画面に遷移
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HelpPage(),
+            ),
+          );
+        }
+      },
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.arrow_circle_right),
+            activeIcon: Icon(Icons.arrow_circle_right),
+            label: '録音',
+            tooltip: "This is a Book Page",//長押しの時にでるやつ
+            backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.access_alarm),
+            activeIcon: Icon(Icons.access_alarm),
+            label: '設定',
+            tooltip: "This is a Business Page",
+            backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dehaze),
+            activeIcon: Icon(Icons.dehaze),
+            label: '履歴',
+            tooltip: "This is a School Page",
+            backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.help),
+            activeIcon: Icon(Icons.help),
+            label: 'ヘルプ',
+            tooltip: "This is a Settings Page",
+            backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+          ),
+        ],
+
+        type: BottomNavigationBarType.fixed,
+        // ここで色を設定していても、shiftingにしているので
+        // Itemの方のbackgroundColorが勝ちます。
+        backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+        enableFeedback: true,
+        // IconTheme系統の値が優先されます。
+        iconSize: 18,
+        // 横向きレイアウトは省略します。
+        // landscapeLayout: 省略
+        selectedFontSize: 20,
+        selectedIconTheme: const IconThemeData(size: 30, color: Color.fromRGBO(0, 24, 88, 1)),
+        selectedLabelStyle: const TextStyle(color: Color.fromRGBO(0, 24, 88, 1)),
+        // ちなみに、LabelStyleとItemColorの両方を選択した場合、ItemColorが勝ちます。
+        selectedItemColor: Color.fromRGBO(0, 24, 88, 1),
+        unselectedFontSize: 15,
+        unselectedIconTheme: const IconThemeData(size: 25, color: Color.fromRGBO(245, 130, 174, 1)),
+        unselectedLabelStyle: const TextStyle(color: Color.fromRGBO(245, 130, 174, 1)),
+        // IconTheme系統の値が優先されるのでこの値は適応されません。
+        unselectedItemColor: Color.fromRGBO(245, 130, 174, 1),
+    );
+        
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
