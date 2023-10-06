@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(text: "時間指定"),
+      appBar: Header(text: "設定"),
       body: Container(
         height: 400,
         width: double.infinity,

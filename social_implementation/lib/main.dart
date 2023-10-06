@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), 
-       bottomNavigationBar:Footer(currentIndex: 1,context: context,),
+       bottomNavigationBar:Footer(currentIndex: 0,context: context,),
       
     );
 

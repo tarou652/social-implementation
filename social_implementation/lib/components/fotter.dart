@@ -51,6 +51,7 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
             label: '録音',
             tooltip: "This is a Book Page",//長押しの時にでるやつ
             backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_alarm),
