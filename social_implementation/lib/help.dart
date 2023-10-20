@@ -53,8 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the buts:',
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              '$_counter',style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
