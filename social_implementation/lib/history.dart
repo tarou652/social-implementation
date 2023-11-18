@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:SI/components/fotter.dart';
+import 'package:SI/components/header.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
