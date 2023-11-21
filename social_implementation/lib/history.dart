@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // 再生するファイルを指定
     final directory = await getApplicationDocumentsDirectory();
     String pathToWrite = directory.path;
-    final localFile = '$pathToWrite/recording/$filename.m4a';
+    final localFile = '$pathToWrite/recording/$filename';
 
     // 再生開始
     await audioPlayer.play(DeviceFileSource(localFile));
@@ -85,14 +85,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // 再生の開始停止
   void _playingHandle(String filename) {
+    print(filename);
     setState(() {
       // 録音中の場合は録音停止
       if (_recordingStatus) {
         _recordingStatus = false;
       }
+      // 再生中の場合は停止、停止中の場合は再生
+      _playingStatusMap[filename] = !_playingStatusMap[filename]!;
 
-      _playingStatusMap[filename] = !_playingStatusMap[filename];
-      if (_playingStatus) {
+      if (_playingStatusMap[filename]!) {
         _startPlaying(filename);
       } else {
         _pausePlaying();
@@ -128,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shape: const CircleBorder(),
                                 primary: Colors.lightBlue,
                               ),
-                              child: _playingStatus ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
+                              child: _playingStatusMap[fileName] ?? false ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
                             ),
                           ),
                           Divider(
