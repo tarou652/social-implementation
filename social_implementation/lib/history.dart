@@ -1,9 +1,13 @@
-import 'dart:io';
 import 'package:SI/components/fotter.dart';
-import 'package:SI/components/header.dart';
 import 'package:flutter/material.dart';
+import 'package:SI/components/header.dart';
+import 'dart:async';
+import 'package:intl/intl.dart';
+import 'package:record/record.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:path/path.dart';
+import 'dart:io';
 void main() {
   runApp(HistoryPage());
 }
@@ -12,104 +16,139 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Internal Storage Files List',
-      home: Scaffold(
-        appBar: AppBar(title: Text('Internal Storage Files List')),
-        body: FilesListWidget(),
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class FilesListWidget extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
   @override
-  _FilesListWidgetState createState() => _FilesListWidgetState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _FilesListWidgetState extends State<FilesListWidget> {
-  List<String> _fileList = [];
 
+class _MyHomePageState extends State<MyHomePage> {
+  bool _recordingStatus = false; // 録音状態(true:録音中/false:停止中)
+  bool _playingStatus = false; // 再生状態(true:再生中/false:停止中)
+  Map<String, bool> _playingStatusMap = {};
+  AudioPlayer audioPlayer = AudioPlayer();
+  Directory appDocDir =Directory('');
+  List<FileSystemEntity> files = List<FileSystemEntity>.empty(growable: true);
   @override
-  void initState() {
-    super.initState();
-    _listInternalFiles(); // 内部ストレージのファイルをリスト化する処理を呼び出す
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _Setfiles();
+  }
+  void _Setfiles() async {
+
+    appDocDir = await getApplicationDocumentsDirectory();
+    final recordingFolderPath = '${appDocDir.path}/recording';
+    final recordingDirectory = Directory(recordingFolderPath);
+    files = recordingDirectory.listSync();
+    // 各ファイル名に対してマップにエントリーを追加
+    for (var file in files) {
+      String fileName = basename(file.path);
+      _playingStatusMap[fileName] = false;
+    }
+    print("履歴画面${files.length}");
+    // ウィジェットを再描画
+    setState(() {});
+  }
+  void _startPlaying(String filename) async {
+    // 再生するファイルを指定
+    final directory = await getApplicationDocumentsDirectory();
+    String pathToWrite = directory.path;
+    final localFile = '$pathToWrite/recording/$filename.m4a';
+
+    // 再生開始
+    await audioPlayer.play(DeviceFileSource(localFile));
+
+    // 再生終了後、ステータス変更
+    audioPlayer.onPlayerComplete.listen((event) {
+      setState(() {
+        _playingStatus = false;
+      });
+    });
   }
 
-  Future<void> _listInternalFiles() async {
-    try {
-      Directory appDir =
-          await getApplicationDocumentsDirectory(); // 内部ストレージのディレクトリパスを取得
-      List<FileSystemEntity> files = appDir.listSync(); // ディレクトリ内のファイル一覧を取得
-      setState(() {
-        _fileList = files.map((file) => file.path).toList(); // ファイルのパスをリストに追加
-      });
-    } catch (e) {
-      print('Error listing internal files: $e'); // ファイルリスト作成中にエラーが発生したことを表示
-    }
+  // 再生一時停止
+  void _pausePlaying() async {
+    await audioPlayer.pause();
+  }
+  // 再生の開始停止
+  void _playingHandle(String filename) {
+    setState(() {
+      // 録音中の場合は録音停止
+      if (_recordingStatus) {
+        _recordingStatus = false;
+      }
+
+      _playingStatusMap[filename] = !_playingStatusMap[filename];
+      if (_playingStatus) {
+        _startPlaying(filename);
+      } else {
+        _pausePlaying();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(text: "Internal Storage Files List"),
-      body: ListView.separated(
-        itemCount: _fileList.length,
-        separatorBuilder: (context, index) => Divider(), // ファイルごとに区切り線を挿入
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_fileList[index]), // ファイルのパスを表示
-          );
-        },
+      appBar: Header(text: "録音履歴"),
+      backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+      body: Column(
+          children:[ Expanded(
+              child: Container(
+
+                child: ListView.builder(
+                  itemCount: files.length,
+
+                  itemBuilder: (context, index) {
+                    String fileName = basename(files[index].path); // ファイル名を取
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 20.0), // リストアイテムの上下の間隔
+                      color: Colors.lightBlue[50],
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(fileName),
+                            tileColor: Colors.blue[50],
+                            trailing: ElevatedButton(
+                              onPressed: () {_playingHandle(fileName);},
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                primary: Colors.lightBlue,
+                              ),
+                              child: _playingStatus ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
+                            ),
+                          ),
+                          Divider(
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                        ],
+                      ),
+                    );
+
+                  },
+                ),
+              )
+          ),
+          ],
       ),
-      bottomNavigationBar: Footer(currentIndex: 2, context: context),
+
+      bottomNavigationBar:Footer(currentIndex: 2,context: context),
+
     );
-  }
-}
 
-class Header extends StatelessWidget implements PreferredSizeWidget {
-  final String text;
-
-  const Header({Key? key, required this.text}) : super(key: key);
-
-  @override
-  Size get preferredSize => Size.fromHeight(50);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: Text(text),
-    );
-  }
-}
-
-class Footer extends StatelessWidget {
-  final int currentIndex;
-  final BuildContext context;
-
-  const Footer({Key? key, required this.currentIndex, required this.context})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.business),
-          label: 'Business',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.history),
-          label: 'History',
-        ),
-      ],
-      onTap: (index) {
-        // Handle item taps here
-      },
-    );
   }
 }
