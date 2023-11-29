@@ -4,10 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
-<<<<<<< HEAD
-=======
   record_linux
->>>>>>> 24d222b8052f62d37e08970e235bd5fbf88f4f7e
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

@@ -47,6 +47,26 @@ class _MyHomePageState extends State<MyHomePage> {
     super.didChangeDependencies();
     _Setfiles();
   }
+  void _deleteFile(String filename) async {
+    // Get the index of the file in the list
+    int index = files.indexWhere((file) => basename(file.path) == filename);
+
+    // Remove the file from the list
+    files.removeAt(index);
+
+    // Remove the file from the file system
+    final file = File('${appDocDir.path}/recording/$filename');
+    if (await file.exists()) {
+      await file.delete();
+      print("消したよ");
+    }
+
+    // Remove the entry from the map
+    _playingStatusMap.remove(filename);
+
+    // Update the state to reflect the changes
+    setState(() {});
+  }
   void _Setfiles() async {
 
     appDocDir = await getApplicationDocumentsDirectory();
@@ -108,29 +128,41 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: Header(text: "録音履歴"),
       backgroundColor: Color.fromRGBO(254, 246, 228, 1),
       body: Column(
-          children:[ Expanded(
+        children: [
+          Expanded(
               child: Container(
-
                 child: ListView.builder(
                   itemCount: files.length,
-
                   itemBuilder: (context, index) {
-                    String fileName = basename(files[index].path); // ファイル名を取
+                    String fileName = basename(files[index].path);
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 20.0), // リストアイテムの上下の間隔
+                      margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 20.0),
                       color: Colors.lightBlue[50],
                       child: Column(
                         children: [
                           ListTile(
                             title: Text(fileName),
                             tileColor: Colors.blue[50],
-                            trailing: ElevatedButton(
-                              onPressed: () {_playingHandle(fileName);},
-                              style: ElevatedButton.styleFrom(
-                                shape: const CircleBorder(),
-                                primary: Colors.lightBlue,
-                              ),
-                              child: _playingStatusMap[fileName] ?? false ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {_playingHandle(fileName);},
+                                  style: ElevatedButton.styleFrom(
+                                    shape: const CircleBorder(),
+                                    primary: Colors.lightBlue,
+                                  ),
+                                  child: _playingStatusMap[fileName] ?? false ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {_deleteFile(fileName);},
+                                  style: ElevatedButton.styleFrom(
+                                    shape: const CircleBorder(),
+                                    primary: Colors.lightBlue,
+                                  ),
+                                  child: const Icon(Icons.delete),
+                                ),
+                              ],
                             ),
                           ),
                           Divider(
@@ -140,12 +172,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     );
-
                   },
                 ),
               )
           ),
-          ],
+        ],
       ),
 
       bottomNavigationBar:Footer(currentIndex: 2,context: context),

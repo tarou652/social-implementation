@@ -13,20 +13,13 @@ dependencies:
   http: ^0.13.3
   english_words: ^4.0.0
   provider: ^6.0.0
-<<<<<<< HEAD
 
-  intl: ^0.18.1
-
-  audioplayers: ^5.2.1
-  path_provider: ^2.1.1
-
-=======
   intl: ^0.18.1
   audioplayers: ^5.2.1
   path_provider: ^2.1.1
   record: ^4.4.0
   path: ^1.8.0
->>>>>>> 24d222b8052f62d37e08970e235bd5fbf88f4f7e
+
 
 dev_dependencies:
   flutter_test:
