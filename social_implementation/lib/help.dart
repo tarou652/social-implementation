@@ -1,4 +1,4 @@
-import 'package:SI/components/footer.dart';
+import 'package:SI/components/fotter.dart';
 import 'package:flutter/material.dart';
 import 'package:SI/components/header.dart';
 
