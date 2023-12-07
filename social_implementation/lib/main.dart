@@ -1,4 +1,4 @@
-import 'package:SI/components/fotter.dart';
+import 'package:SI/components/footer.dart';
 import 'package:flutter/material.dart';
 import 'package:SI/components/header.dart';
 import 'dart:async';
@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var _timeString = '00:00:00';
 
   DateTime _startTime = DateTime.now();
+  Color customColor = Color(0xFF8BD3DD);
 
   var _timer;
   var _isStart = false;
@@ -167,17 +168,19 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(_timeString, style: TextStyle(fontSize: 60)),
           ),
           Container(
+            color: customColor,
             width: 100,
             height: 50,
-            color: Colors.greenAccent,
             child: TextButton(
                 onPressed:() async {
-
                   _startTimer();
                   _recordingHandle();
-
                 },
-                child: Text(_isStart ? 'STOP' : 'START')),
+                child: Text(_isStart ? 'STOP' : 'START'),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                ),
+            ),
           )
         ],
       ),
