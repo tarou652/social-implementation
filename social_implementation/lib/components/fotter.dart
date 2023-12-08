@@ -3,7 +3,6 @@ import 'package:SI/main.dart';
 import 'package:flutter/material.dart';
 import 'package:SI/help.dart';
 import 'package:SI/setting.dart';
-import 'package:SI/data.dart';
 
 class Footer extends StatelessWidget implements PreferredSizeWidget {
   final int currentIndex;
@@ -40,7 +39,7 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
           // ヘルプ画面に遷移
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => DataPage(),
+              builder: (context) => HelpPage(),
             ),
           );
         }
@@ -69,9 +68,9 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: Color.fromRGBO(254, 246, 228, 1),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.build),
-            activeIcon: Icon(Icons.build),
-            label: '解析',
+            icon: Icon(Icons.help),
+            activeIcon: Icon(Icons.help),
+            label: 'ヘルプ',
             tooltip: "This is a Settings Page",
             backgroundColor: Color.fromRGBO(254, 246, 228, 1),
           ),
