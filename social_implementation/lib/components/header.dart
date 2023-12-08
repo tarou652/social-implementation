@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:SI/help.dart';
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String text;
   Header({required this.text});
@@ -18,7 +18,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DataPage(),
+                builder: (context) => HelpPage(),
               ),
             );
           },

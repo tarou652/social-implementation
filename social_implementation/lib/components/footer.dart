@@ -2,7 +2,7 @@ import 'package:SI/history.dart';
 import 'package:SI/main.dart';
 import 'package:flutter/material.dart';
 import 'package:SI/setting.dart';
-
+import 'package:SI/data.dart';
 class Footer extends StatelessWidget implements PreferredSizeWidget {
   final int currentIndex;
   final BuildContext context;
@@ -38,7 +38,7 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
           // 解析画面に遷移
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => HelpPage(),
+              builder: (context) => DataPage(),
             ),
           );
         }
