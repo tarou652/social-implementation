@@ -164,10 +164,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               // 追加: 再生バー
               Slider(
-                value: _currentPosition,
+                value: 1.0,
                 onChanged: _onSliderChanged,
                 min: 0.0,
-                max: _totalDuration,
+                max: 5.0,
               ),
             ],
           ),
