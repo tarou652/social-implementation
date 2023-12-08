@@ -130,13 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _playingbar(String filename) {
-    player.onDurationChanged.listen((Duration d) {
-      print('Total_duration: $d');
-      setState(() => Total_duration = d);
-    });
-  }
-
   //再生中に表示するウィジェット
   Widget _buildPlaybackWidget() {
     List<Widget> playbackWidgets = [];
@@ -174,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: _currentPosition,
                 onChanged: _onSliderChanged,
                 min: 0.0,
-                max: Total_duration,
+                max: _totalDuration,
               ),
             ],
           ),
