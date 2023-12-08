@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:SI/help.dart';
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String text;
 
@@ -10,7 +10,20 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor:Color.fromRGBO(254, 246, 228, 1) ,
       title: Text(text,style: TextStyle(color:Color.fromRGBO(0, 24, 88, 1)),),
-      actions: [Icon(Icons.add)],
+      actions: [
+        IconButton(
+          icon: Icon(Icons.help),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HelpPage()),
+
+            );
+          },
+        ),
+      ],
+
+
     );
   }
 
