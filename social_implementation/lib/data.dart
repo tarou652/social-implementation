@@ -28,7 +28,6 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-
 class _MyHomePageState extends State<MyHomePage> {
 
   @override
@@ -37,11 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: Header(text: "解析"),
       backgroundColor: Color.fromRGBO(254, 246, 228, 1),
       body: Container(
-
-
       ),
       bottomNavigationBar:Footer(currentIndex: 3,context: context),
-
     );
 
   }

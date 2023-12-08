@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:SI/help.dart';
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String text;
-
   Header({required this.text});
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -16,14 +14,13 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HelpPage()),
-
+              MaterialPageRoute(
+                  builder: (context) => HelpPage(),
+              ),
             );
           },
         ),
       ],
-
-
     );
   }
 

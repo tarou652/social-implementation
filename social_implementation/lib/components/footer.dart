@@ -1,7 +1,6 @@
 import 'package:SI/history.dart';
 import 'package:SI/main.dart';
 import 'package:flutter/material.dart';
-import 'package:SI/help.dart';
 import 'package:SI/setting.dart';
 import 'package:SI/data.dart';
 
@@ -37,7 +36,7 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
             ),
           );
         } else if (index == 3) {
-          // ヘルプ画面に遷移
+          // 解析画面に遷移
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => DataPage(),
@@ -50,29 +49,24 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
             icon: Icon(Icons.arrow_circle_right),
             activeIcon: Icon(Icons.arrow_circle_right),
             label: '録音',
-            tooltip: "This is a Book Page",//長押しの時にでるやつ
             backgroundColor: Color.fromRGBO(254, 246, 228, 1),
-
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_alarm),
             activeIcon: Icon(Icons.access_alarm),
             label: '設定',
-            tooltip: "This is a Business Page",
             backgroundColor: Color.fromRGBO(254, 246, 228, 1),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.dehaze),
             activeIcon: Icon(Icons.dehaze),
             label: '履歴',
-            tooltip: "This is a School Page",
             backgroundColor: Color.fromRGBO(254, 246, 228, 1),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.build),
             activeIcon: Icon(Icons.build),
             label: '解析',
-            tooltip: "This is a Settings Page",
             backgroundColor: Color.fromRGBO(254, 246, 228, 1),
           ),
         ],
@@ -97,7 +91,6 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
         // IconTheme系統の値が優先されるのでこの値は適応されません。
         unselectedItemColor: Color.fromRGBO(245, 130, 174, 1),
     );
-        
   }
 
   @override
