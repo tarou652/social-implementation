@@ -13,7 +13,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.help),
+          icon: Icon(Icons.help,color:Colors.black),
           onPressed: () {
             Navigator.push(
               context,
@@ -24,6 +24,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
       ],
+
     );
   }
 
