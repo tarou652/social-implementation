@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ExpansionTile(
             title: Text(
                 '録音履歴について',
-                style: TextStyle(color: Color(0xff001858),fontWeight: FontWeight.bold),
+                style: TextStyle(color: Color(0xff001858)),
             ),
             children: <Widget>[
               Padding(
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ExpansionTile(
             title: Text(
                 '時間設定について',
-                style: TextStyle(color: Color(0xff001858),fontWeight: FontWeight.bold),
+                style: TextStyle(color: Color(0xff001858)),
             ),
             children: <Widget>[
               Padding(
@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ExpansionTile(
             title: Text(
                 '録音画面について',
-                style: TextStyle(color: Color(0xff001858),fontWeight: FontWeight.bold),
+                style: TextStyle(color: Color(0xff001858)),
             ),
             children: <Widget>[
               Padding(
@@ -139,14 +139,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ExpansionTile(
             title: Text(
                 'アンケート',
-                style: TextStyle(color: Color(0xff001858),fontWeight: FontWeight.bold),
+                style: TextStyle(color: Color(0xff001858)),
             ),
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: GestureDetector(
                   onTap: () {
-                    _launchURL('https://forms.office.com/pages/responsepage.aspx?id=XYP-cpVeEkWK4KezivJfyMCO0vGn8KlHnna6XBkyMlBUNThURFhKRDRWNU1KMExZVzg5NE9VMk0wRC4u'); //URL
+                    _launchURL('https://forms.office.com/pages/responsepage.aspx?id=XYP-cpVeEkWK4KezivJfyMCO0vGn8KlHnna6XBkyMlBUMjBNMlJEWjlVQTZLTUhIVDdVOUJKMFdSSS4u'); //URL
                   },
                   child: RichText(
                     text: TextSpan(
