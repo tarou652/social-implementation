@@ -96,9 +96,17 @@ class _MyHomePageState extends State<MyHomePage> {
     String pathToWrite = directory.path;
     final localFile = '$pathToWrite/recording/$filename';
 
+
+
     // 再生開始
     await audioPlayer.play(DeviceFileSource(localFile));
 
+    /*duration 再生時間の取得
+    player.onDurationChanged.listen((Duration d) {
+      print('Max duration: $d');
+      setState(() => duration = d);
+    });
+    */
     // 再生終了後、ステータス変更
     audioPlayer.onPlayerComplete.listen((event) {
       setState(() {
@@ -164,10 +172,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               // 追加: 再生バー
               Slider(
-                value: 1.0,
+                value: 0.0,
                 onChanged: _onSliderChanged,
                 min: 0.0,
-                max: 5.0,
+                max: 0.0,
+                //max: duration,
               ),
             ],
           ),
