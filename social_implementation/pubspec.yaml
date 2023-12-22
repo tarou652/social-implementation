@@ -20,6 +20,7 @@ dependencies:
   record: ^4.4.0
   path: ^1.8.0
   url_launcher: ^6.2.1
+  flutter_svg: ^2.0.9
 
 
 dev_dependencies:
@@ -30,3 +31,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/

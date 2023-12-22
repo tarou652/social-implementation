@@ -3,6 +3,8 @@ import 'package:SI/main.dart';
 import 'package:flutter/material.dart';
 import 'package:SI/setting.dart';
 import 'package:SI/data.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 class Footer extends StatelessWidget implements PreferredSizeWidget {
   final int currentIndex;
   final BuildContext context;
@@ -43,28 +45,68 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
           );
         }
       },
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.arrow_circle_right),
-          activeIcon: Icon(Icons.arrow_circle_right),
+          icon: SvgPicture.asset(
+            'assets/images/arrow-right-bold-round.svg',
+            width: 30,
+            height: 30,
+            color: Color.fromRGBO(245, 130, 174, 1),
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/images/arrow-right-bold-round.svg',
+            width: 30,
+            height: 30,
+            color: Color.fromRGBO(0, 24, 88, 1),
+          ),
           label: '録音',
           backgroundColor: Color.fromRGBO(254, 246, 228, 1),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.access_alarm),
-          activeIcon: Icon(Icons.access_alarm),
+          icon: SvgPicture.asset(
+            'assets/images/alarm-clock.svg',
+            width: 30,
+            height: 30,
+            color: Color.fromRGBO(245, 130, 174, 1),
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/images/alarm-clock.svg',
+            width: 30,
+            height: 30,
+            color: Color.fromRGBO(0, 24, 88, 1),
+          ),
           label: '設定',
           backgroundColor: Color.fromRGBO(254, 246, 228, 1),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.dehaze),
-          activeIcon: Icon(Icons.dehaze),
+          icon: SvgPicture.asset(
+            'assets/images/list-circle.svg',
+            width: 30,
+            height: 30,
+            color: Color.fromRGBO(245, 130, 174, 1),
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/images/list-circle.svg',
+            width: 30,
+            height: 30,
+            color: Color.fromRGBO(0, 24, 88, 1),
+          ),
           label: '履歴',
           backgroundColor: Color.fromRGBO(254, 246, 228, 1),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.build),
-          activeIcon: Icon(Icons.build),
+          icon: SvgPicture.asset(
+            'assets/images/options-settings.svg',
+            width: 30,
+            height: 30,
+            color: Color.fromRGBO(245, 130, 174, 1),
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/images/options-settings.svg',
+            width: 30,
+            height: 30,
+            color: Color.fromRGBO(0, 24, 88, 1),
+          ),
           label: '解析',
           backgroundColor: Color.fromRGBO(254, 246, 228, 1),
         ),
