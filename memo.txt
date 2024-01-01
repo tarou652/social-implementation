@@ -23,6 +23,89 @@ vscode
 git
 github desktop
 
+今のところの後追い録音の構想
+基準よりおおきな音がなったら前後１０秒（合計２０秒）のデータを取る（２５０MB）
+方法１
+1秒ずつ録音をしてあとから結合する方法
+→一番ファイルサイズが小さくなる。システムがむずそう
+方法②
+１分間録音して解析し、大きな音がでてから前後１０秒を保存するようにする。
+→５８秒に大きな音がでたとしたら１２秒しかとれないので、正確性がない。
 参考
+flutter_sound
+https://colinchflutter.github.io/2023-09-28/23-32-29-356717-implementing-audio-merging-with-flutter-sound/
 録音について
 https://qiita.com/exRyusei1026/items/29689c809964cfaca3bf
+
+
+
+AIめも
+具体的には、flutter_soundパッケージを使用してマイクを起動し、音声データをリアルタイムで取得します。そして、取得した音声データの音量を計算して、一定の閾値を超えるかどうかを判定します。これにより、大きな音を検出することができます。
+
+まず、flutter_soundパッケージをプロジェクトに追加します。pubspec.yamlファイルに以下の行を追加します：
+
+dependencies:
+ flutter_sound: ^8.1.9
+次に、flutter_soundパッケージをインポートします：
+
+import 'package:flutter_sound/flutter_sound.dart';
+そして、以下のようにFlutterSoundRecorderオブジェクトを作成します：
+
+FlutterSoundRecorder _recordingSession;
+そして、以下のようにマイクを起動し、音声データをリアルタイムで取得します：
+
+_recordingSession.openAudioSession();
+_recordingSession.startRecorder();
+取得した音声データの音量を計算して、一定の閾値を超えるかどうかを判定します。これにより、大きな音を検出することができます。
+
+なお、この方法ではマイクを起動して音声データをリアルタイムで取得していますが、録音を開始することはありません。したがって、録音データを保存することはできません。また、音声データの音量を計算する方法は、音声データの形式や音声データの取得方法によります。具体的な実装方法については、flutter_soundパッケージのドキュメンテーションや、パッケージの提供者によるチュートリアルを参照してください2。
+
+
+
+import 'dart:io';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+
+class FFmpeg {
+ static Future<File> concatenate(List<String> assetPaths, {String output = "new.mp3"}) async {
+   final directory = await getTemporaryDirectory();
+   final file = File("${directory.path}/$output");
+
+   final ffm = FlutterFFmpeg();
+   final cmd = ["-y"];
+   for (var path in assetPaths) {
+     final tmp = await copyToTemp(path);
+     cmd.add("-i");
+     cmd.add(tmp.path);
+   }
+
+   cmd.addAll([
+     "-filter_complex",
+     "[0:a] [1:a] concat=n=${assetPaths.length}:v=0:a=1 [a]",
+     "-map", "[a]", "-c:a", "mp3", file.path
+   ]);
+
+   await ffm.executeWithArguments(cmd);
+   return file;
+ }
+
+ static Future<File> copyToTemp(String path) async {
+   Directory tempDir = await getTemporaryDirectory();
+   final tempFile = File('${tempDir.path}/${path.split("/").last}');
+   if (await tempFile.exists()) {
+     return tempFile;
+   }
+   final bd = await rootBundle.load(path);
+   await tempFile.writeAsBytes(bd.buffer.asUint8List(), flush: true);
+   return tempFile;
+ }
+}
+
+// 使用例
+final track = await FFmpeg.concatenate(
+ [
+   "assets/audios/test1.mp3",
+   "assets/audios/test2.mp3",
+   "assets/audios/test3.mp3",
+ ],
+ output: "output.mp3"
+);
