@@ -1,4 +1,4 @@
-import 'package:SI/components/fotter.dart';
+import 'package:SI/components/footer.dart';
 import 'package:flutter/material.dart';
 import 'package:SI/components/header.dart';
 import 'dart:async';
@@ -161,11 +161,10 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: Header(text: "録音画面"),
       backgroundColor: Color.fromRGBO(254, 246, 228, 1),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start, // ここをMainAxisAlignment.startに変更
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Center(
-            child: Text(_timeString, style: TextStyle(fontSize: 60)),
-          ),
+
           Container(
             width: 100,
             height: 50,
@@ -177,8 +176,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   _recordingHandle();
 
                 },
-                child: Text(_isStart ? 'STOP' : 'START')),
-          )
+                child: Text(_isStart ? 'STOP' : 'START'),
+            ),
+          ),
+          SizedBox(height: 20),
+          Center(
+            child: Text(
+              _timeString,
+              style: TextStyle(fontSize: 60),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar:Footer(currentIndex: 0,context: context),
