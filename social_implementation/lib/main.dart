@@ -1,43 +1,33 @@
-<<<<<<< Updated upstream
-
-=======
 import 'dart:core';
 import 'package:SI/components/fotter.dart';
->>>>>>> Stashed changes
 import 'package:flutter/material.dart';
+import 'package:SI/components/header.dart';
+import 'dart:async';
+import 'package:intl/intl.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-<<<<<<< Updated upstream
 import 'package:path/path.dart';
-=======
+import 'dart:io';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'dart:math';
 
->>>>>>> Stashed changes
 void main() {
-  runApp(const MyApp());
+  runApp(Myapp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class Myapp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _Start();
     return MaterialApp(
-      title: 'Record Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Record Demo'),
-        ),
-        body: const Center(
-          child: MyHomePage(),
-        ),
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
       ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
   void _Start() async{
@@ -61,10 +51,18 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
+}
+class ClockTimer extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _MyHomePageState();
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -81,8 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String LatestCreatefile ="";
   Directory appDocDir =Directory('');
   List<FileSystemEntity> files = List<FileSystemEntity>.empty(growable: true);
-<<<<<<< Updated upstream
-=======
   var _timeString = '00:00:00';
   DateTime _startTime = DateTime.now();
   var _isStart = false;
@@ -107,7 +103,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     super.initState();
   }
->>>>>>> Stashed changes
 
   // 録音開始
   void _startRecording() async {
@@ -117,18 +112,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // 録音ファイルを指定
       final directory = await getApplicationDocumentsDirectory();
       // recording フォルダのパスを作成
-<<<<<<< Updated upstream
-      final recordingFolderPath = '${appDocDir.path}/recording';
-
-      // フォルダが存在しない場合は作成
-      if (!Directory(recordingFolderPath).existsSync()) {
-        Directory(recordingFolderPath).createSync(recursive: true);
-        print('recording フォルダが作成されました。');
-      } else {
-        print('recording フォルダは既に存在しています。');
-      }
-=======
->>>>>>> Stashed changes
       String pathToWrite = directory.path;//アプリ専用ディレクトリのパスを保存。
       var now = DateTime.now();
       filename="${now.year},${now.month},${now.day},${now.hour},${now.minute},${now.second}";
@@ -142,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final sound = _amplitude?.current ?? -160.0;
     print(sound);
     if(sound > -3 && !_oversound){
-        _oversound=true;
+      _oversound=true;
 
     }
     if(I==false){
@@ -174,16 +157,15 @@ class _MyHomePageState extends State<MyHomePage> {
       final file = File(LatestCreatefile);
 
       if (await file.exists()) {
-    await file.delete();
-    print("消したよ");
-    }else{
-    print("ファイルが存在しないぞ");
-    print(file);
+        await file.delete();
+        print("消したよ");
+      }else{
+        print("ファイルが存在しないぞ");
+        print(file);
+      }
     }
   }
-  }
 
-  // 録音停止
   // 録音停止
   void _stopRecording() async {
     await record.stop();
@@ -195,11 +177,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // ディレクトリ内のファイルリストを取得
       files = recordingDirectory.listSync();
     });
-<<<<<<< Updated upstream
-=======
 
     print("録音画面${files.length}");
->>>>>>> Stashed changes
   }
   // 録音停止
   void _AutostopRecording() async {
@@ -216,15 +195,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     print("録音画面${files.length}");
   }
-<<<<<<< Updated upstream
-
-  // 再生一時停止
-  void _pausePlaying() async {
-    await audioPlayer.pause();
-  }
-
-=======
->>>>>>> Stashed changes
   // 録音の開始停止
   void _recordingHandle() {
     // 再生中の場合は何もしない
@@ -238,22 +208,10 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
   }
-<<<<<<< Updated upstream
-
-  // 再生の開始停止
-  void _playingHandle() {
-    setState(() {
-      // 録音中の場合は録音停止
-      if (_recordingStatus) {
-        _recordingStatus = false;
-        _stopRecording();
-      }
-=======
   // 自動録音の開始停止
   Future<void> _AutorecordingHandle() async {
     int n=0;
     _AutorecordingStatus = !_AutorecordingStatus;
->>>>>>> Stashed changes
 
     while(_AutorecordingStatus){
       _AutostartRecording();
@@ -271,32 +229,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-<<<<<<< Updated upstream
-  // ステータスメッセージ
-  String _statusMessage() {
-    String msg = '';
-
-    if(_recordingStatus) {
-      if (_playingStatus) {
-        msg = '-'; // 録音○、再生○（発生しない）
-      } else {
-        msg = '録音中'; // 録音×、再生○
-      }
-    } else {
-      if (_playingStatus) {
-        msg = '再生中'; // 録音○、再生×
-      } else {
-        msg = '待機中'; // 録音×、再生×
-      }
-    }
-
-    return msg;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-=======
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -319,59 +251,10 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.greenAccent,
             child: TextButton(
                 onPressed:() async {
->>>>>>> Stashed changes
 
-        decoration: BoxDecoration(
-            color: Color.fromRGBO(254, 246, 228, 1)
-        ),
-        padding: const EdgeInsets.all(50.0),
-        child: Column(
-          children: <Widget>[
+                  _startTimer();
+                  _recordingHandle();
 
-<<<<<<< Updated upstream
-            // ステータスメッセージ
-            Text(
-              _statusMessage(),
-              style: const TextStyle(
-                color: Colors.blue,
-                fontSize: 40.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            // 縦スペース
-            const SizedBox(height: 30,),
-            // 2つのボタン
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // 録音ボタン
-                TextButton(
-                  onPressed: _recordingHandle,
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.lightBlue,
-                  ),
-                  child: Text(
-                    _recordingStatus ? "停止" : '録音',
-                    style: const TextStyle(color: Colors.white, fontSize: 20.0),
-                  ),
-                ),
-                // 再生ボタン
-                SizedBox(
-                  height: 50, // ボタンのサイズ調整
-                  child: ElevatedButton(
-                    onPressed: () {_playingHandle();},
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      primary: Colors.lightBlue,
-                    ),
-                    child: _playingStatus ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-                child: Container(
-=======
                 },
                 child: Text(_isStart ? 'STOP' : 'START')),
           ),
@@ -395,44 +278,37 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
   void _startTimer() {
->>>>>>> Stashed changes
 
-                  child: ListView.builder(
-                    itemCount: files.length,
-                    itemBuilder: (context, index) {
-                      String fileName = basename(files[index].path); // ファイル名を取
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 5.0), // リストアイテムの上下の間隔
-                        color: Colors.lightBlue[50],
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text(fileName),
-                              tileColor: Colors.blue[50],
-                              trailing: ElevatedButton(
-                                onPressed: () {_playingHandle();},
-                                style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  primary: Colors.lightBlue,
-                                ),
-                                child: _playingStatus ? const Icon(Icons.stop) : const Icon(Icons.play_arrow),
-                              ),
-                            ),
-                            Divider(
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
-                      );
+    setState(() {
+      _isStart = !_isStart;
+      if (_isStart) {
+        _startTime = DateTime.now();
+        _timer  = Timer.periodic(Duration(seconds: 1), _onTimer);
+      } else {
+        _timer.cancel();
+      }
+    });
+  }
 
-                    },
-                  ),
-                )
-            ),
-          ],
-        ));
+  void _onTimer(Timer timer) {
+    /// 現在時刻を取得
+    var now = DateTime.now();
+    /// 開始時刻と比較して差分を取得
+    var diff = now.difference(_startTime).inSeconds;
 
+    /// タイマーのロジック
+    var hour = (diff / (60 * 60)).floor();
+    var mod = diff % (60 * 60);
+    var minutes = (mod / 60).floor();
+    var second = mod % 60;
+
+    setState(() => {
+      _timeString = """${_convertTwoDigits(hour)}:${_convertTwoDigits(minutes)}:${_convertTwoDigits(second)}"""
+    });
+  }
+
+  String _convertTwoDigits(int number) {
+    return number >= 10 ? "$number" : "0$number";
   }
 }
 double log10(num x) => x > 0 ? log(x) / ln10 : double.nan;
