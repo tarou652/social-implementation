@@ -17,6 +17,7 @@ import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'dart:math';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 void main() {
   runApp(
     SettingPage(),);
@@ -74,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
     bitRate: 64000,
     numChannels: 2,
   );
+  var rng = Random();
   AudioPlayer audioPlayer = AudioPlayer();
   String filename="";
   String LatestCreatefile ="";
@@ -109,6 +111,21 @@ class _MyHomePageState extends State<MyHomePage> {
     if(I==false){
       _oversound=false;
     }
+  }
+  //バックグラウンドでの処理
+  //timeの書きかたfinal alarm = DateTime.utc(2023, 3, 7, 2);
+  Future<void> _BG(time) async {
+    var id = rng.nextInt(100000000000);
+    await AndroidAlarmManager.oneShotAt(
+      time,
+      id,
+      _AutorecordingHandle,
+      alarmClock: true,
+      allowWhileIdle: true,
+      exact: true,
+      wakeup: true,
+      rescheduleOnReboot: true,
+    );
   }
   // 録音開始
   void _AutostartRecording() async {

@@ -8,6 +8,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'dart:io';
+
 void main() {
   runApp(HistoryPage());
 }
@@ -90,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // ウィジェットを再描画
     setState(() {});
   }
+
   void _startPlaying(String filename) async {
     // 再生するファイルを指定
     final directory = await getApplicationDocumentsDirectory();
