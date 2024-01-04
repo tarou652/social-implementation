@@ -46,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double _totalDuration = 0.0; // 音声ファイルの総再生時間
   bool _recordingStatus = false; // 録音状態(true:録音中/false:停止中)
   bool _playingStatus = false; // 再生状態(true:再生中/false:停止中)
+  int dB = 0;
   Map<String, bool> _playingStatusMap = {};
   Record record = Record();
   AudioPlayer audioPlayer = AudioPlayer();
@@ -239,14 +240,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
-                // 追加: 再生バー
-                Slider(
-                  value: 0.0,
-                  onChanged: _onSliderChanged,
-                  min: 0.0,
-                  max: 0.0,
-                  //max: duration,
-                ),
               ],
             ),
           ),
@@ -323,7 +316,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ListTile(
                           title: Text(fileName),
                           //tileColor: Colors.blue[50],
-                          subtitle: Text('最大デシベル音：00dB'),
+                          subtitle: Text('最大デシベル音：${dB}dB'),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
