@@ -6,7 +6,9 @@ import 'package:SI/data.dart';
 class Footer extends StatelessWidget implements PreferredSizeWidget {
   final int currentIndex;
   final BuildContext context;
-  Footer({required this.currentIndex, required this.context});
+  final int selected ;
+  Footer({required this.currentIndex, required this.context, required this.selected});
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -80,11 +82,12 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
       // 横向きレイアウトは省略します。
       // landscapeLayout: 省略
       selectedFontSize: 20,
-      selectedIconTheme:
-          const IconThemeData(size: 30, color: Color.fromRGBO(0, 24, 88, 1)),
+      selectedIconTheme: selected == 0
+          ? const IconThemeData(size: 30, color: Color.fromRGBO(0, 24, 88, 1))
+          : const IconThemeData(size: 30, color: Color.fromRGBO(245, 130, 174, 1)),
       selectedLabelStyle: const TextStyle(color: Color.fromRGBO(0, 24, 88, 1)),
       // ちなみに、LabelStyleとItemColorの両方を選択した場合、ItemColorが勝ちます。
-      selectedItemColor: Color.fromRGBO(0, 24, 88, 1),
+      selectedItemColor: selected == 0 ? Color.fromRGBO(0, 24, 88, 1) : Color.fromRGBO(245, 130, 174, 1),
       unselectedFontSize: 15,
       unselectedIconTheme: const IconThemeData(
           size: 25, color: Color.fromRGBO(245, 130, 174, 1)),

@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Color.fromRGBO(254, 246, 228, 1),
       body: Container(
       ),
-      bottomNavigationBar:Footer(currentIndex: 3,context: context),
+      bottomNavigationBar:Footer(currentIndex: 3,context: context,selected: 0),
     );
 
   }

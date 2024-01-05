@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: _form(),
       ),
-      bottomNavigationBar:Footer(currentIndex: 1,context: context),
+      bottomNavigationBar:Footer(currentIndex: 1,context: context,selected: 0),
     );
   }
 

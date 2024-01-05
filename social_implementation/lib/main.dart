@@ -188,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      bottomNavigationBar:Footer(currentIndex: 0,context: context),
+      bottomNavigationBar:Footer(currentIndex: 0,context: context,selected: 0),
     );
   }
   void _startTimer() {
