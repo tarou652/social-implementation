@@ -44,7 +44,11 @@ class ClockTimer extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool _recordingStatus = false; // 録音状態(true:録音中/false:停止中)
   bool _playingStatus = false; // 再生状態(true:再生中/false:停止中)
-  Record record = Record();
+  late final AudioRecorder record;
+  final config = RecordConfig(
+    bitRate: 64000,
+    numChannels: 2,
+  );
   AudioPlayer audioPlayer = AudioPlayer();
   String filename="";
   Directory appDocDir =Directory('');
@@ -55,6 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var _timer;
   var _isStart = false;
+  void initState() {
+    record = AudioRecorder();
+    super.initState();
+  }
   // 録音開始
   void _startRecording() async {
     // 権限確認
@@ -77,12 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final localFile = '${pathToWrite}/recording/${filename}.m4a';
 
       // 録音開始
-      await record.start(
-        path: localFile,
-        encoder: AudioEncoder.aacLc, // by default
-        bitRate: 128000, // by default
-        samplingRate: 44100, // by default
-      );
+      await record.start(config, path: localFile);
     }
   }
 
