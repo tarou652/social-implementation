@@ -3,7 +3,19 @@ import 'package:SI/components/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:core';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:intl/intl.dart';
+import 'package:record/record.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
+import 'dart:math';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 void main() {
   runApp(
     SettingPage(),);
@@ -12,6 +24,7 @@ void main() {
 class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    _Start();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -19,6 +32,22 @@ class SettingPage extends StatelessWidget {
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
+  }
+  void _Start() async{
+    final directory = await getApplicationDocumentsDirectory();
+    // recording フォルダのパスを作成
+    final AutoFolderPath = '${directory.path}/Auto';
+    final recordingFolderPath = '${directory.path}/recording';
+    // ディレクトリが存在するか確認
+    bool Reexists = await Directory(recordingFolderPath).exists();
+    bool Autoexists = await Directory(AutoFolderPath).exists();
+    // ディレクトリが存在しない場合、作成
+    if (!Reexists) {
+      await Directory(recordingFolderPath).create(recursive: true);
+    }
+    if (!Autoexists) {
+      await Directory(AutoFolderPath).create(recursive: true);
+    }
   }
 }
 
@@ -35,16 +64,134 @@ class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   DateTime dateTime = DateTime.now();
   bool _value = true;
-  int _counter = 0;
   List<DateTime> history = [];
   List<bool> historySwitchValues = List.generate(100, (index) => true);
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
+  bool _recordingStatus = false; // 録音状態(true:録音中/false:停止中)
+  bool _playingStatus = false; // 再生状態(true:再生中/false:停止中)
+  bool _AutorecordingStatus = false; // 録音状態(true:録音中/false:停止中)
+  final config = RecordConfig(
+    bitRate: 64000,
+    numChannels: 2,
+  );
+  var rng = Random();
+  AudioPlayer audioPlayer = AudioPlayer();
+  String filename="";
+  String LatestCreatefile ="";
+  Directory appDocDir =Directory('');
+  List<FileSystemEntity> files = List<FileSystemEntity>.empty(growable: true);
+  int _recordDuration = 0;
+  Timer? _timer2;
+  bool _oversound=false;
+  var _timer;
+  late final AudioRecorder record;
+  RecordState _recordState = RecordState.stop;
+  StreamSubscription<Amplitude>? _amplitudeSub;
+  Amplitude? _amplitude;
+  void initState() {
+    record = AudioRecorder();
+    _amplitudeSub = record
+        .onAmplitudeChanged(const Duration(milliseconds: 300))
+        .listen((amp) {
+      setState(() => _amplitude = amp);
+      judge(true);
     });
-  }
 
+    super.initState();
+  }
+  void judge(bool I){
+
+    final sound = _amplitude?.current ?? -160.0;
+    print(sound);
+    if(sound > -3 && !_oversound){
+      _oversound=true;
+
+    }
+    if(I==false){
+      _oversound=false;
+    }
+  }
+  //バックグラウンドでの処理
+  //timeの書きかたfinal alarm = DateTime.utc(2023, 3, 7, 2);
+  Future<void> _BG(time) async {
+    var id = rng.nextInt(100000000000);
+    await AndroidAlarmManager.oneShotAt(
+      time,
+      id,
+      _AutorecordingHandle,
+      alarmClock: true,
+      allowWhileIdle: true,
+      exact: true,
+      wakeup: true,
+      rescheduleOnReboot: true,
+    );
+  }
+  // 録音開始
+  void _AutostartRecording() async {
+    // 権限確認
+    if (await record.hasPermission()) {
+      // 録音ファイルを指定
+      final directory = await getApplicationDocumentsDirectory();
+      String pathToWrite = directory.path;//アプリ専用ディレクトリのパスを保存。
+      var now = DateTime.now();
+      filename="${now.year},${now.month},${now.day},${now.hour},${now.minute},${now.second}";
+      final localFile = '${pathToWrite}/Auto/${filename}.m4a';
+
+      // 録音開始
+      await record.start(config, path: localFile);
+      LatestCreatefile=localFile;
+
+    }
+  }
+  Future<void> deletefile() async {
+    if(_oversound){
+      print("大きスギィ！");
+    }else{
+      final file = File(LatestCreatefile);
+
+      if (await file.exists()) {
+        await file.delete();
+        print("消したよ");
+      }else{
+        print("ファイルが存在しないぞ");
+        print(file);
+      }
+    }
+  }
+  // 録音停止
+  void _AutostopRecording() async {
+    await record.stop();
+
+    appDocDir = await getApplicationDocumentsDirectory();
+    final recordingFolderPath = '${appDocDir.path}/Auto';
+    final recordingDirectory = Directory(recordingFolderPath);
+    //judge(false);
+    setState(() {
+      // ディレクトリ内のファイルリストを取得
+      files = recordingDirectory.listSync();
+    });
+
+    print("録音画面${files.length}");
+  }
+  // 自動録音の開始停止
+  Future<void> _AutorecordingHandle() async {
+    int n=0;
+    _AutorecordingStatus = !_AutorecordingStatus;
+
+    while(_AutorecordingStatus){
+      _AutostartRecording();
+      await Future.delayed(Duration(seconds: 10));
+      judge(true);
+      deletefile();
+      _AutostopRecording();
+      judge(false);
+      n++;
+      print("今${n}回");
+    }
+    if(!_AutorecordingStatus){
+      deletefile();
+      _AutostopRecording();
+    }
+  }
   void saveDateTime(){
     setState((){
       history.add(dateTime);
@@ -59,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: _form(),
       ),
-      bottomNavigationBar:Footer(currentIndex: 1,context: context),
+      bottomNavigationBar:Footer(currentIndex: 1,context: context,selected: 0),
     );
   }
 

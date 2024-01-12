@@ -9,6 +9,7 @@ void main() {
 
 class HelpPage extends StatelessWidget {
   @override
+
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
@@ -24,7 +25,6 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      bottomNavigationBar:Footer(currentIndex: 3,context: context),
+      bottomNavigationBar:Footer(currentIndex: 3,context: context,selected: 1),
     );
   }
 

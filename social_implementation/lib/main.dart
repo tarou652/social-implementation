@@ -49,6 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int dB = 0;
   Map<String, bool> _playingStatusMap = {};
   Record record = Record();
+  late final AudioRecorder record;
+  final config = RecordConfig(
+    bitRate: 64000,
+    numChannels: 2,
+  );
   AudioPlayer audioPlayer = AudioPlayer();
   String filename="";
   Directory appDocDir =Directory('');
@@ -66,6 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _Setfiles();
   }
 
+  void initState() {
+    record = AudioRecorder();
+    super.initState();
+  }
   // 録音開始
   void _startRecording() async {
     // 権限確認
@@ -88,12 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final localFile = '${pathToWrite}/recording/${filename}.m4a';
 
       // 録音開始
-      await record.start(
-        path: localFile,
-        encoder: AudioEncoder.aacLc, // by default
-        bitRate: 128000, // by default
-        samplingRate: 44100, // by default
-      );
+      await record.start(config, path: localFile);
     }
   }
 
@@ -360,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _buildPlaybackWidget(), // ここで再生中のウィジェットを表示
         ],
       ),
-      bottomNavigationBar:Footer(currentIndex: 0,context: context),
+      bottomNavigationBar:Footer(currentIndex: 0,context: context,selected: 0),
     );
   }
 
