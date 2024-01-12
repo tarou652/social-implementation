@@ -29,14 +29,14 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
               builder: (context) => SettingPage(),
             ),
           );
-        } else if (index == 2) {
+        //} else if (index == 2) {
           // 履歴画面に遷移
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => HistoryPage(),
-            ),
-          );
-        } else if (index == 3) {
+          //Navigator.of(context).push(
+            //MaterialPageRoute(
+              //builder: (context) => HistoryPage(),
+            //),
+          //);
+        } else if (index == 2) {
           // 解析画面に遷移
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -58,12 +58,12 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
           label: '設定',
           backgroundColor: Color.fromRGBO(254, 246, 228, 1),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.dehaze),
-          activeIcon: Icon(Icons.dehaze),
-          label: '履歴',
-          backgroundColor: Color.fromRGBO(254, 246, 228, 1),
-        ),
+        //BottomNavigationBarItem(
+          //icon: Icon(Icons.dehaze),
+          //activeIcon: Icon(Icons.dehaze),
+          //label: '履歴',
+          //backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+        //),
         BottomNavigationBarItem(
           icon: Icon(Icons.build),
           activeIcon: Icon(Icons.build),

@@ -48,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _playingStatus = false; // 再生状態(true:再生中/false:停止中)
   int dB = 0;
   Map<String, bool> _playingStatusMap = {};
-  Record record = Record();
   late final AudioRecorder record;
   final config = RecordConfig(
     bitRate: 64000,
