@@ -261,29 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '自動録音',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff001858),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CupertinoSwitch(
-                  activeColor: Color(0xff8BD3DD),
-                  trackColor: Color(0xff545C81),
-                  value: _value,
-                  onChanged: (value) => setState(() => _value = value),
-                ),
-              ],
-            ),
-            Divider(
-              thickness: 1, // 区切り線の太さを指定
-              color: Color(0xffB2B3BA), // 区切り線の色を指定
-            ),
+
             SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
