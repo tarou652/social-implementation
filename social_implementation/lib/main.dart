@@ -174,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // 再生するファイルを指定
     final directory = await getApplicationDocumentsDirectory();
     String pathToWrite = directory.path;
-    final localFile = '$pathToWrite/recording/$filename.m4a';
+    final localFile = '$pathToWrite/recording/$filename';
 
     // 再生開始
     await audioPlayer.play(DeviceFileSource(localFile));
@@ -214,7 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
   }
-
+  //再生中に表示するウィジェット
   Widget _buildPlaybackWidget() {
     List<Widget> playbackWidgets = [];
 
