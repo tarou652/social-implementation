@@ -10,7 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+    
+  fl_chart: ^0.36.0
   url_launcher: ^6.2.1
   http: ^0.13.3
   english_words: ^4.0.0
