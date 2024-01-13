@@ -14,9 +14,36 @@ import 'package:path/path.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
+import 'package:workmanager/workmanager.dart';
 import 'dart:math';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+@pragma('vm:entry-point')
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) {
+    // バックグラウンドで実行したいタスクの処理をここに記述
+    if (task == "scheduledTask") {
+      scheduledTask();
+    }
+    return Future.value(true);
+  });
+
+}
+void scheduledTask() {
+  // バックグラウンドで実行したい処理をここに記述
+  print("Background task executed: scheduledTask");
+}
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Workmanager().initialize(
+    callbackDispatcher,
+    isInDebugMode: true, // デバッグモードの場合は true に設定
+  );
+  DateTime scheduledTime = DateTime.now().add(Duration(minutes: 1));
+  Workmanager().registerPeriodicTask(
+    "1",
+    "simplePeriodicTask",
+    initialDelay: scheduledTime.difference(DateTime.now()),
+  );
   runApp(
     SettingPage(),);
 }
@@ -64,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   DateTime dateTime = DateTime.now();
   bool _value = true;
-  List<DateTime> history = [];
+  List<Map<String, dynamic>> history = [];
   List<bool> historySwitchValues = List.generate(100, (index) => true);
   bool _recordingStatus = false; // 録音状態(true:録音中/false:停止中)
   bool _playingStatus = false; // 再生状態(true:再生中/false:停止中)
@@ -87,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
   RecordState _recordState = RecordState.stop;
   StreamSubscription<Amplitude>? _amplitudeSub;
   Amplitude? _amplitude;
+
   void initState() {
     record = AudioRecorder();
     _amplitudeSub = record
@@ -110,21 +138,16 @@ class _MyHomePageState extends State<MyHomePage> {
       _oversound=false;
     }
   }
+
   //バックグラウンドでの処理
   //timeの書きかたfinal alarm = DateTime.utc(2023, 3, 7, 2);
-  Future<void> _BG(time) async {
-    var id = rng.nextInt(100000000000);
-    await AndroidAlarmManager.oneShotAt(
-      time,
-      id,
-      _AutorecordingHandle,
-      alarmClock: true,
-      allowWhileIdle: true,
-      exact: true,
-      wakeup: true,
-      rescheduleOnReboot: true,
-    );
+  Future<void> _BG() async {
+
+
+
+    print("設定したはずずずずずずずずｚ${DateTime.now().add(Duration(minutes: 1))}");
   }
+
   // 録音開始
   void _AutostartRecording() async {
     // 権限確認
@@ -192,12 +215,20 @@ class _MyHomePageState extends State<MyHomePage> {
       _AutostopRecording();
     }
   }
-  void saveDateTime(){
+  void saveDateTime(DateTime start, DateTime end) {
+    setState(() {
+      history.add({
+        'startTime': DateTime(start.year, start.month, start.day, start.hour, start.minute),
+        'endTime': start.add(Duration(hours: end.hour, minutes: end.minute))
+      });
+    });
+    print(history);
+  }
+  void DeleteDateTime(num){
     setState((){
-      history.add(dateTime);
+      history.removeAt(num);
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,7 +240,8 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar:Footer(currentIndex: 1,context: context,selected: 0),
     );
   }
-
+  int TimeHour = 1;
+  int TimeMinute = 00;
   Widget _form() {
     return Form(
       key: _formKey,
@@ -229,8 +261,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    saveDateTime();
+                  onPressed: () async {
+                    final endTime = DateTime(1, 1, 1, TimeHour, TimeMinute);
+                    saveDateTime(dateTime,endTime);
+                    await _BG();
                   },
                   style: TextButton.styleFrom(
                     primary: Color(0xffF582AE),
@@ -245,11 +279,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-            Divider(
-              thickness: 1, // 区切り線の太さを指定
-              color: Color(0xffB2B3BA), // 区切り線の色を指定
-            ),
-            SizedBox(height: 16),
+
+
             SizedBox(
               height: 200,
               child: CupertinoDatePicker(
@@ -263,6 +294,48 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
             SizedBox(height: 16),
+            // 追加: TextFieldウィジェット
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    DropdownButton<int>(
+                      value: TimeHour,
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          TimeHour = newValue!;
+                        });
+                      },
+                      items: <int>[0,1, 2, 3, 4,5,6,7,8]
+                          .map<DropdownMenuItem<int>>((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text(value.toString()),
+                        );
+                      }).toList(),
+                    ),
+                    Text('時'),
+                    DropdownButton<int>(
+                      value: TimeMinute,
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          TimeMinute = newValue!;
+                        });
+                      },
+                      items: <int>[00,10, 20, 30, 40,50,]
+                          .map<DropdownMenuItem<int>>((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text(value.toString()),
+                        );
+                      }).toList(),
+                    ),
+                    Text('分後まで'),
+                  ],
+                ),
+                SizedBox(height: 20.0), // 適宜スペースを追加
+
+
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -287,7 +360,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: history.asMap().entries.map((entry) {
                   final index = entry.key;
-                  final savedDateTime = entry.value;
+                  final entryData = entry.value;
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -300,32 +373,33 @@ class _MyHomePageState extends State<MyHomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${savedDateTime.year}/${savedDateTime.month}/${savedDateTime.day}',
+                                  '${entryData['startTime'].year}.${entryData['startTime'].month}.${entryData['startTime'].day}',
                                   style: TextStyle(
                                     fontSize: 25,
                                     color: Color(0xff001858),
-                                    fontWeight: FontWeight.bold, // 太文字にする
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
-                                  '${savedDateTime.hour}:${savedDateTime.minute}',
+                                  '${entryData['startTime'].hour.toString().padLeft(2, '0')}:${entryData['startTime'].minute.toString().padLeft(2, '0')}~${entryData['endTime'].hour.toString().padLeft(2, '0')}:${entryData['endTime'].minute.toString().padLeft(2, '0')}',
                                   style: TextStyle(
                                     fontSize: 30,
                                     color: Color(0xff001858),
-                                    fontWeight: FontWeight.bold, // 太文字にする
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
+                                )
                               ],
                             ),
-                            CupertinoSwitch(
-                              activeColor: Color(0xff8BD3DD),
-                              trackColor: Color(0xff545C81),
-                              value: historySwitchValues[index],
-                              onChanged: (value) {
-                                setState(() {
-                                  historySwitchValues[index] = value;
-                                });
+                            ElevatedButton(
+                              onPressed: () {
+                                DeleteDateTime(index);
                               },
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                primary: Colors.transparent, // 透明な背景色
+                                elevation: 0, // ボタンの影を削除
+                              ),
+                              child: const Icon(Icons.delete, color: Colors.grey),
                             ),
                           ],
                         ),

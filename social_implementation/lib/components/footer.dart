@@ -33,17 +33,18 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
           // 履歴画面に遷移
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => HistoryPage(),
-            ),
-          );
-        } else if (index == 3) {
-          // 解析画面に遷移
-          Navigator.of(context).push(
-            MaterialPageRoute(
               builder: (context) => DataPage(),
             ),
           );
         }
+        // else if (index == 3) {
+        //   // 解析画面に遷移
+        //   Navigator.of(context).push(
+        //     MaterialPageRoute(
+        //       builder: (context) => DataPage(),
+        //     ),
+        //   );
+        // }
       },
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -64,12 +65,12 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
           label: '履歴',
           backgroundColor: Color.fromRGBO(254, 246, 228, 1),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.build),
-          activeIcon: Icon(Icons.build),
-          label: '解析',
-          backgroundColor: Color.fromRGBO(254, 246, 228, 1),
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.build),
+        //   activeIcon: Icon(Icons.build),
+        //   label: '解析',
+        //   backgroundColor: Color.fromRGBO(254, 246, 228, 1),
+        // ),
       ],
 
       type: BottomNavigationBarType.fixed,
