@@ -105,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Directory appDocDir =Directory('');
   List<FileSystemEntity> files = List<FileSystemEntity>.empty(growable: true);
   bool _oversound=false;
+  int _Maxsound =0;
   var _timer;
   late final AudioRecorder record;
   RecordState _recordState = RecordState.stop;
@@ -305,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () async {
                     final endTime = DateTime(1, 1, 1, TimeHour, TimeMinute);
                     saveDateTime(dateTime,endTime);
-                    await _BG();
+                    _AutorecordingHandle();
                   },
                   style: TextButton.styleFrom(
                     primary: Color(0xffF582AE),

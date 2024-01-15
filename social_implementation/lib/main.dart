@@ -305,7 +305,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 physics: ClampingScrollPhysics(),
                 itemCount: files.length,
                 itemBuilder: (context, index) {
-                  String fileName = basename(files[index].path);
+                  String fileName = basename(files[files.length - index - 1].path);
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
                     decoration: BoxDecoration(
