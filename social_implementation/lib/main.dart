@@ -143,11 +143,9 @@ class _MyHomePageState extends State<MyHomePage> {
       await file.delete();
       print("消したよ");
     }
-
     // Remove the entry from the map
     _playingStatusMap.remove(filename);
 
-    // Update the state to reflect the changes
     setState(() {});
   }
 

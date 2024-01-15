@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:record/record.dart';
@@ -53,11 +54,10 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     _Start();
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
   void _Start() async{
@@ -65,9 +65,11 @@ class SettingPage extends StatelessWidget {
     // recording フォルダのパスを作成
     final AutoFolderPath = '${directory.path}/Auto';
     final recordingFolderPath = '${directory.path}/recording';
+    final historyfolderpath = '${directory.path}/history';
     // ディレクトリが存在するか確認
     bool Reexists = await Directory(recordingFolderPath).exists();
     bool Autoexists = await Directory(AutoFolderPath).exists();
+    bool Historyexists = await Directory(historyfolderpath).exists();
     // ディレクトリが存在しない場合、作成
     if (!Reexists) {
       await Directory(recordingFolderPath).create(recursive: true);
@@ -75,14 +77,13 @@ class SettingPage extends StatelessWidget {
     if (!Autoexists) {
       await Directory(AutoFolderPath).create(recursive: true);
     }
+    if (!Historyexists) {
+      await Directory(historyfolderpath).create(recursive: true);
+    }
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -90,11 +91,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   DateTime dateTime = DateTime.now();
-  bool _value = true;
-  List<Map<String, dynamic>> history = [];
+  List<String> history = [];
   List<bool> historySwitchValues = List.generate(100, (index) => true);
-  bool _recordingStatus = false; // 録音状態(true:録音中/false:停止中)
-  bool _playingStatus = false; // 再生状態(true:再生中/false:停止中)
   bool _AutorecordingStatus = false; // 録音状態(true:録音中/false:停止中)
   final config = RecordConfig(
     bitRate: 64000,
@@ -106,17 +104,21 @@ class _MyHomePageState extends State<MyHomePage> {
   String LatestCreatefile ="";
   Directory appDocDir =Directory('');
   List<FileSystemEntity> files = List<FileSystemEntity>.empty(growable: true);
-  int _recordDuration = 0;
-  Timer? _timer2;
   bool _oversound=false;
   var _timer;
   late final AudioRecorder record;
   RecordState _recordState = RecordState.stop;
   StreamSubscription<Amplitude>? _amplitudeSub;
   Amplitude? _amplitude;
-
+  //起動したらよびだされるもの
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SetDateTime();
+  }
   void initState() {
     record = AudioRecorder();
+
     _amplitudeSub = record
         .onAmplitudeChanged(const Duration(milliseconds: 300))
         .listen((amp) {
@@ -215,18 +217,56 @@ class _MyHomePageState extends State<MyHomePage> {
       _AutostopRecording();
     }
   }
-  void saveDateTime(DateTime start, DateTime end) {
-    setState(() {
-      history.add({
-        'startTime': DateTime(start.year, start.month, start.day, start.hour, start.minute),
-        'endTime': start.add(Duration(hours: end.hour, minutes: end.minute))
-      });
-    });
+  Future<void> SetDateTime() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final historyFolderPath = '${directory.path}/history';
+    final historyDirectory = Directory(historyFolderPath);
+    final historypaths = historyDirectory.listSync();
+    List<String> itizilist =[];
+    for (var file in historypaths) {
+      String fileName = basename(file.path);
+      itizilist.add(fileName);
+    }
+    history = itizilist;
+    setState(() {});
     print(history);
   }
-  void DeleteDateTime(num){
+
+  Future<void> saveDateTime(DateTime start, DateTime end) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final historyFolderPath = '${directory.path}/history';
+    final historyDirectory = Directory(historyFolderPath);
+    final endtime =start.add(Duration(hours: end.hour,minutes: end.minute));
+    final txtfile = File('${historyFolderPath}/${start.year}.${start.month}.${start.day},${start.hour.toString().padLeft(2, '0')}.${start.minute.toString().padLeft(2, '0')}~${endtime.hour.toString().padLeft(2, '0')}.${endtime.minute.toString().padLeft(2, '0')}');
+    if (!await txtfile.exists()) {
+      await txtfile.create();
+    }
+    final historypaths = historyDirectory.listSync();
+    List<String> itizilist =[];
+    for (var file in historypaths) {
+      String fileName = basename(file.path);
+      itizilist.add(fileName);
+    }
+    history = itizilist;
+    setState(() {});
+    print(history);
+  }
+  Future<void> DeleteDateTime(index) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final historyFolderPath = '${directory.path}/history';
+    // Get the index of the file in the list
+    final Filename=history[index];
+
+    // Remove the file from the list
+    history.removeAt(index);
+
+    // Remove the file from the file system
+    final file = File('$historyFolderPath/$Filename');
+    if (await file.exists()) {
+    await file.delete();
+    print("消したよ");
+    }
     setState((){
-      history.removeAt(num);
     });
   }
   @override
@@ -242,6 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   int TimeHour = 1;
   int TimeMinute = 00;
+
   Widget _form() {
     return Form(
       key: _formKey,
@@ -361,6 +402,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: history.asMap().entries.map((entry) {
                   final index = entry.key;
                   final entryData = entry.value;
+                  List<String> parts = entryData.split(',');
+                  final day  = parts[0];
+                  final time = parts[1];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -373,7 +417,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${entryData['startTime'].year}.${entryData['startTime'].month}.${entryData['startTime'].day}',
+                                  '${day}',
                                   style: TextStyle(
                                     fontSize: 25,
                                     color: Color(0xff001858),
@@ -381,7 +425,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                                 Text(
-                                  '${entryData['startTime'].hour.toString().padLeft(2, '0')}:${entryData['startTime'].minute.toString().padLeft(2, '0')}~${entryData['endTime'].hour.toString().padLeft(2, '0')}:${entryData['endTime'].minute.toString().padLeft(2, '0')}',
+                                  '${time}',
                                   style: TextStyle(
                                     fontSize: 30,
                                     color: Color(0xff001858),
