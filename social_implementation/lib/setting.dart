@@ -66,10 +66,12 @@ class SettingPage extends StatelessWidget {
     final AutoFolderPath = '${directory.path}/Auto';
     final recordingFolderPath = '${directory.path}/recording';
     final historyfolderpath = '${directory.path}/history';
+    final dbfolderpath = '${directory.path}/db';
     // ディレクトリが存在するか確認
     bool Reexists = await Directory(recordingFolderPath).exists();
     bool Autoexists = await Directory(AutoFolderPath).exists();
     bool Historyexists = await Directory(historyfolderpath).exists();
+    bool dbexists =await Directory(dbfolderpath).exists();
     // ディレクトリが存在しない場合、作成
     if (!Reexists) {
       await Directory(recordingFolderPath).create(recursive: true);
@@ -79,6 +81,9 @@ class SettingPage extends StatelessWidget {
     }
     if (!Historyexists) {
       await Directory(historyfolderpath).create(recursive: true);
+    }
+    if (!dbexists) {
+      await Directory(dbfolderpath).create(recursive: true);
     }
   }
 }
@@ -98,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
     bitRate: 64000,
     numChannels: 2,
   );
+  late Directory directory = Directory('');
   var rng = Random();
   AudioPlayer audioPlayer = AudioPlayer();
   String filename="";
@@ -113,8 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Amplitude? _amplitude;
   //起動したらよびだされるもの
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
+
+    directory = await getApplicationDocumentsDirectory();
     SetDateTime();
   }
   void initState() {
@@ -129,13 +137,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
     super.initState();
   }
-  void judge(bool I){
+  Future<void> judge(bool I) async {
 
     final sound = _amplitude?.current ?? -160.0;
-    print(sound);
-    if(sound > -3 && !_oversound){
+    final Sound = (sound + 77);
+    print("${Sound}db");
+    if(Sound > 40 && !_oversound){
+      //oversoundをTrueにすることで生成してすぐに消すコードをとめるようにする
       _oversound=true;
-
+      //ここからは最大DBを保存するコード。ファイルの中の順番が新しいファイルが上にくるようにdbNumで調整する。
+      final dbFolderPath = '${directory.path}/db';
+      final dbDirectory = Directory(dbFolderPath);
+      final dbPaths = dbDirectory.listSync();
+      final dbNum = 1000 - dbPaths.length;
+      final txtfile = File('$dbFolderPath/$dbNum,$_Maxsound');
+      if (!await txtfile.exists()) {
+    await txtfile.create();
+    }
+      print(dbPaths);
+    }
+    if(sound > _Maxsound){
+      _Maxsound=Sound as int;
     }
     if(I==false){
       _oversound=false;
@@ -144,19 +166,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //バックグラウンドでの処理
   //timeの書きかたfinal alarm = DateTime.utc(2023, 3, 7, 2);
-  Future<void> _BG() async {
-
-
-
-    print("設定したはずずずずずずずずｚ${DateTime.now().add(Duration(minutes: 1))}");
-  }
+  // Future<void> _BG() async {
+  //
+  //
+  //
+  //   print("設定したはずずずずずずずずｚ${DateTime.now().add(Duration(minutes: 1))}");
+  // }
 
   // 録音開始
   void _AutostartRecording() async {
     // 権限確認
     if (await record.hasPermission()) {
       // 録音ファイルを指定
-      final directory = await getApplicationDocumentsDirectory();
+
       String pathToWrite = directory.path;//アプリ専用ディレクトリのパスを保存。
       var now = DateTime.now();
       filename="${now.year},${now.month},${now.day},${now.hour},${now.minute},${now.second}";
@@ -171,6 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> deletefile() async {
     if(_oversound){
       print("大きスギィ！");
+
     }else{
       final file = File(LatestCreatefile);
 
@@ -182,6 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
         print(file);
       }
     }
+    _Maxsound=0;
   }
   // 録音停止
   void _AutostopRecording() async {
@@ -219,7 +243,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
   Future<void> SetDateTime() async {
-    final directory = await getApplicationDocumentsDirectory();
     final historyFolderPath = '${directory.path}/history';
     final historyDirectory = Directory(historyFolderPath);
     final historypaths = historyDirectory.listSync();
@@ -234,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> saveDateTime(DateTime start, DateTime end) async {
-    final directory = await getApplicationDocumentsDirectory();
+
     final historyFolderPath = '${directory.path}/history';
     final historyDirectory = Directory(historyFolderPath);
     final endtime =start.add(Duration(hours: end.hour,minutes: end.minute));
@@ -252,11 +275,28 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
     print(history);
   }
+  Future<void> Deletedbfile(index) async {
+    // DBフォルダのリストを作ってそこからindex番目のものを消す
+    final dbFolderPath = '${directory.path}/db';
+    final dbDirectory = Directory(dbFolderPath);
+    final dbPaths = dbDirectory.listSync();
+    List<String> itizilist =[];
+    for (var file in dbPaths) {
+      String fileName = basename(file.path);
+      itizilist.add(fileName);
+    }
+    final dbList = itizilist;
+    final dbFilename=dbList[index];
+    final dbfile = File('$dbFolderPath/$dbFilename');
+    if (await dbfile.exists()) {
+      await dbfile.delete();
+      print("DB消したよ");
+    }
+  }
   Future<void> DeleteDateTime(index) async {
-    final directory = await getApplicationDocumentsDirectory();
     final historyFolderPath = '${directory.path}/history';
-    // Get the index of the file in the list
     final Filename=history[index];
+
 
     // Remove the file from the list
     history.removeAt(index);
@@ -267,6 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await file.delete();
     print("消したよ");
     }
+
     setState((){
     });
   }
@@ -306,7 +347,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () async {
                     final endTime = DateTime(1, 1, 1, TimeHour, TimeMinute);
                     saveDateTime(dateTime,endTime);
-                    _AutorecordingHandle();
+
                   },
                   style: TextButton.styleFrom(
                     primary: Color(0xffF582AE),
@@ -418,7 +459,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${day}',
+                                  '$day',
                                   style: TextStyle(
                                     fontSize: 25,
                                     color: Color(0xff001858),
@@ -426,7 +467,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                                 Text(
-                                  '${time}',
+                                  '$time',
                                   style: TextStyle(
                                     fontSize: 30,
                                     color: Color(0xff001858),

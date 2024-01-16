@@ -60,9 +60,9 @@ class Footer extends StatelessWidget implements PreferredSizeWidget {
           backgroundColor: Color.fromRGBO(254, 246, 228, 1),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.dehaze),
-          activeIcon: Icon(Icons.dehaze),
-          label: '履歴',
+          icon: Icon(Icons.build),
+          activeIcon: Icon(Icons.build),
+          label: '解析',
           backgroundColor: Color.fromRGBO(254, 246, 228, 1),
         ),
         // BottomNavigationBarItem(
