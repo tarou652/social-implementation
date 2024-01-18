@@ -21,6 +21,7 @@ class DataPage extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('騒音対策'),
+          backgroundColor: Color(0xffFEF6E4),
         ),
         body: SingleChildScrollView(
           child: AppBody(),
@@ -55,7 +56,6 @@ class AppBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(254, 246, 228, 1),
-      //padding: EdgeInsets.all(16.0),
       child: Column(
         children: [
           // NoiseCard(
@@ -68,6 +68,7 @@ class AppBody extends StatelessWidget {
           SevenDaysChart(title: '過去7日間'),
           SizedBox(height: 16.0),
           Footer(currentIndex: 1,context: context,),
+
         ],
       ),
     );
@@ -93,16 +94,18 @@ class NoiseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Container(
         height: 300.0,
         width: double.infinity,
+
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2.0),
           borderRadius: BorderRadius.circular(15.0),
-          
+          color: Color.fromRGBO(254, 246, 228, 1),
         ),
         child: Column(
           children: [
@@ -126,7 +129,7 @@ class NoiseCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black, width: 2.0),
                         borderRadius: BorderRadius.circular(15.0),
-                        color: Colors.white,
+                        color: Color(0xffFEF6E4),
                       ),
                       child: Column(
                         children: [
@@ -147,7 +150,7 @@ class NoiseCard extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),
-                                  color: Colors.white,
+                                  color: Color(0xffFEF6E4),
                                 ),
                                 child: Column(
                                   children: [
@@ -179,7 +182,7 @@ class NoiseCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black, width: 2.0),
                         borderRadius: BorderRadius.circular(15.0),
-                        color: Colors.white,
+                        color: Color(0xffFEF6E4),
                       ),
                       child: Column(
                         children: [
@@ -200,7 +203,7 @@ class NoiseCard extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),
-                                  color: Colors.white,
+                                  color: Color(0xffFEF6E4),
                                 ),
                                 child: Column(
                                   children: [
@@ -341,6 +344,7 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
     return Column(
       children: [
         NoiseCard(
+
           title: '昨日からのdB値',
           subTitle1: '最大dB値(dB)',
           subTitle2: '検知回数(回)',
@@ -357,7 +361,8 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
         height: 700.0,
         width: double.infinity,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white, width: 2.0),
+          border: Border.all(color: Color(0xffFEF6E4), width: 2.0),
+          color: Color(0xffFEF6E4),
           borderRadius: BorderRadius.circular(15.0),
         ),
         child: Column(
@@ -368,6 +373,7 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
                 "過去７日間",
                 style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
               ),
+
             ),
             SizedBox(height: 10),
             Align(
