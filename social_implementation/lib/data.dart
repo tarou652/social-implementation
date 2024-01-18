@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:SI/components/footer.dart';
 import 'package:flutter/material.dart';
 import 'package:SI/components/header.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 ////////////////////////////////////////////////////////////////
 
@@ -26,9 +30,7 @@ class DataPage extends StatelessWidget {
   }
 }
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -43,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Color.fromRGBO(254, 246, 228, 1),
       body: Container(
       ),
-      bottomNavigationBar:Footer(currentIndex: 2,context: context,selected: 0),
+
     );
 
   }
@@ -56,16 +58,16 @@ class AppBody extends StatelessWidget {
       //padding: EdgeInsets.all(16.0),
       child: Column(
         children: [
-          NoiseCard(
-            title: '昨夜の睡眠dB値',
-            subTitle1: '最大dB値(dB)',
-            subTitle2: '検知回数(回)',
-            subTitle3: '',
-          ),
+          // NoiseCard(
+          //   title: '昨夜の睡眠dB値',
+          //   subTitle1: '最大dB値(dB)',
+          //   subTitle2: '検知回数(回)',
+          //   subTitle3: '',
+          // ),
           SizedBox(height: 16.0),
           SevenDaysChart(title: '過去7日間'),
           SizedBox(height: 16.0),
-          Footer(currentIndex: 2, context: context,selected:0),
+          Footer(currentIndex: 1,context: context,),
         ],
       ),
     );
@@ -77,12 +79,15 @@ class NoiseCard extends StatelessWidget {
   final String subTitle1;
   final String subTitle2;
   final String subTitle3;
-
+  final int Maxdb;
+  final int Sumfile;
   const NoiseCard({
     required this.title,
     required this.subTitle1,
     required this.subTitle2,
     required this.subTitle3,
+    required this.Maxdb,
+    required this.Sumfile,
   });
 
   @override
@@ -149,7 +154,7 @@ class NoiseCard extends StatelessWidget {
                                     Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        subTitle3,
+                                        "$Maxdb",
                                         style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
                                       ),
                                     ),
@@ -183,6 +188,32 @@ class NoiseCard extends StatelessWidget {
                             child: Text(
                               subTitle2,
                               style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
+
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                height: 150.0,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "$Sumfile",
+                                        style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -206,15 +237,119 @@ class NoiseCard extends StatelessWidget {
 
 
 
-//以下がグラフのコード
-class SevenDaysChart extends StatelessWidget {
+class SevenDaysChart extends StatefulWidget {
   final String title;
 
-  const SevenDaysChart({required this.title});
+  SevenDaysChart({required this.title});
+
+  @override
+  _SevenDaysChartState createState() => _SevenDaysChartState();
+}
+
+
+//以下がグラフのコード
+class _SevenDaysChartState extends State<SevenDaysChart> {
+  final  Directory directory = Directory('');
+  List<String> AutodbList =[];
+  List<String> Autofiles =[];
+  List<int> Aweeknum=[0,0,0,0,0,0,0];
+  int Maxdb = 0;
+  int SumFile =0;
+  @override
+  void initState() {
+    super.initState();
+    LoadAutoFile();
+  }
+  Future<void> LoadAutoFile() async {
+    print("ASdwasdwasdwasdw");
+    final directory = await getApplicationDocumentsDirectory();
+    final  AutodbFolderPath = '${directory.path}/Autodb';
+    final AutodbDirectory = Directory(AutodbFolderPath);
+    final AutodbPaths = AutodbDirectory.listSync();
+    List<String> itizilist =[];
+
+    for (var file in AutodbPaths) {
+      String fileName = basename(file.path);
+      itizilist.add(fileName);
+    }
+    AutodbList = itizilist;
+    itizilist=[];
+    final AutorecordingFolderPath = '${directory.path}/Auto';
+    final AutorecordingDirectory = Directory(AutorecordingFolderPath);
+    final Autofilespaths = AutorecordingDirectory.listSync();
+    for (var file in Autofilespaths) {
+      String fileName = basename(file.path);
+      itizilist.add(fileName);
+      List<String> parts = fileName.split(",");
+      int year = int.parse(parts[0]);
+      int month = int.parse(parts[1]);
+      int day = int.parse(parts[2]);
+      DateTime fileday = DateTime(year, month, day);
+      DateTime now = DateTime.now();
+      DateTime Today = DateTime(now.year, now.month, now.day);
+      Duration difference = Today.difference(fileday);
+      switch (difference.inDays) {
+        case 0:
+          Aweeknum[0]=Aweeknum[0]+1;
+          SumFile=SumFile+1;
+          int targetnum= Autofilespaths.indexOf(file);
+          List<String> parts = AutodbList[targetnum].split(',');
+          int targetdb=int.parse(parts[1]);
+          if(targetdb > Maxdb){
+            Maxdb =targetdb;
+          }
+          break;
+        case 1:
+          Aweeknum[1]=Aweeknum[1]+1;
+          SumFile=SumFile+1;
+          int targetnum= Autofilespaths.indexOf(file);
+          List<String> parts = AutodbList[targetnum].split(',');
+          int targetdb=int.parse(parts[1]);
+          if(targetdb > Maxdb){
+            Maxdb =targetdb;
+          }
+          break;
+        case 2:
+          Aweeknum[2]=Aweeknum[2]+1;
+          break;
+        case 3:
+          Aweeknum[3]=Aweeknum[3]+1;
+          break;
+        case 4:
+          Aweeknum[4]=Aweeknum[4]+1;
+          break;
+        case 5:
+          Aweeknum[5]=Aweeknum[5]+1;
+          break;
+        case 6:
+          Aweeknum[6]=Aweeknum[6]+1;
+          break;
+        default:
+          print("週のリスト作るところでエラー");
+      }
+
+    }
+    Autofiles=itizilist;
+    print("$Aweeknumこれが一週間のリスト");
+    setState(() {});
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Column(
+      children: [
+        NoiseCard(
+          title: '昨日からのdB値',
+          subTitle1: '最大dB値(dB)',
+          subTitle2: '検知回数(回)',
+          subTitle3: '',
+          Maxdb: Maxdb,
+          Sumfile: SumFile,
+        ),
+        // Rest of your code...
+        Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -230,7 +365,7 @@ class SevenDaysChart extends StatelessWidget {
             Align(
               alignment: Alignment.topLeft,
               child: Text(
-                title,
+                "過去７日間",
                 style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
               ),
             ),
@@ -240,7 +375,7 @@ class SevenDaysChart extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  '以下のグラフは、過去７日間の最大dB値のデータです。睡眠時の音の基準値は40dBです',
+                  '以下のグラフは、過去７日間の検知回数のデータです。',
                   style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
                 ),
               ),
@@ -252,13 +387,13 @@ class SevenDaysChart extends StatelessWidget {
                 child: BarChart(
                   BarChartData(
                     barGroups: [
-                      BarChartGroupData(x: 0, barRods: [BarChartRodData(y: 3, colors: [Colors.blue])]),
-                      BarChartGroupData(x: 1, barRods: [BarChartRodData(y: 1, colors: [Colors.blue])]),
-                      BarChartGroupData(x: 2, barRods: [BarChartRodData(y: 2, colors: [Colors.blue])]),
-                      BarChartGroupData(x: 3, barRods: [BarChartRodData(y: 3, colors: [Colors.blue])]),
-                      BarChartGroupData(x: 4, barRods: [BarChartRodData(y: 4, colors: [Colors.blue])]),
-                      BarChartGroupData(x: 5, barRods: [BarChartRodData(y: 5, colors: [Colors.blue])]),
-                      BarChartGroupData(x: 6, barRods: [BarChartRodData(y: 6, colors: [Colors.blue])]),
+                      BarChartGroupData(x: 0, barRods: [BarChartRodData(y: Aweeknum[6].toDouble(), colors: [Colors.blue])]),
+                      BarChartGroupData(x: 1, barRods: [BarChartRodData(y: Aweeknum[5].toDouble(), colors: [Colors.blue])]),
+                      BarChartGroupData(x: 2, barRods: [BarChartRodData(y: Aweeknum[4].toDouble(), colors: [Colors.blue])]),
+                      BarChartGroupData(x: 3, barRods: [BarChartRodData(y: Aweeknum[3].toDouble(), colors: [Colors.blue])]),
+                      BarChartGroupData(x: 4, barRods: [BarChartRodData(y: Aweeknum[2].toDouble(), colors: [Colors.blue])]),
+                      BarChartGroupData(x: 5, barRods: [BarChartRodData(y: Aweeknum[1].toDouble(), colors: [Colors.blue])]),
+                      BarChartGroupData(x: 6, barRods: [BarChartRodData(y: Aweeknum[0].toDouble(), colors: [Colors.blue])]),
                     ],
                     titlesData: FlTitlesData(
                       leftTitles: SideTitles(showTitles: true),
@@ -268,19 +403,19 @@ class SevenDaysChart extends StatelessWidget {
                         getTitles: (value) {
                           switch (value.toInt()) {
                             case 0:
-                              return '7日前';
-                            case 1:
                               return '6日前';
-                            case 2:
+                            case 1:
                               return '5日前';
-                            case 3:
+                            case 2:
                               return '4日前';
-                            case 4:
+                            case 3:
                               return '3日前';
-                            case 5:
+                            case 4:
                               return '一昨日';
-                            case 6:
+                            case 5:
                               return '昨日';
+                            case 6:
+                              return '今日';
                             default:
                               return '';
                           }
@@ -296,6 +431,7 @@ class SevenDaysChart extends StatelessWidget {
           ],
         ),
       ),
+    ),
+    ]
     );
-  }
-}
+  }}

@@ -164,15 +164,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  //バックグラウンドでの処理
-  //timeの書きかたfinal alarm = DateTime.utc(2023, 3, 7, 2);
-  // Future<void> _BG() async {
-  //
-  //
-  //
-  //   print("設定したはずずずずずずずずｚ${DateTime.now().add(Duration(minutes: 1))}");
-  // }
-
   // 録音開始
   void _AutostartRecording() async {
     // 権限確認
@@ -319,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: _form(),
       ),
-      bottomNavigationBar:Footer(currentIndex: 1,context: context,selected: 0),
+      bottomNavigationBar:Footer(currentIndex: 1,context: context),
     );
   }
   int TimeHour = 1;
