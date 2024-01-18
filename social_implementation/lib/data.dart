@@ -64,7 +64,9 @@ class AppBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(254, 246, 228, 1),
+
       padding: EdgeInsets.all(16.0),
+
       child: Column(
         children: [
 
@@ -77,6 +79,9 @@ class AppBody extends StatelessWidget {
           SizedBox(height: 16.0),
           SevenDaysChart(title: '過去7日間'),
           SizedBox(height: 16.0),
+
+          Footer(currentIndex: 1,context: context,),
+
 
         ],
       ),
@@ -103,6 +108,7 @@ class NoiseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -110,8 +116,11 @@ class NoiseCard extends StatelessWidget {
       child: Container(
         height: 200.0,
         width: double.infinity,
+
         decoration: BoxDecoration(
+
           color: Color.fromRGBO(254, 246, 228, 1),
+
 
         ),
         child: Row(
@@ -126,6 +135,7 @@ class NoiseCard extends StatelessWidget {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
+
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
@@ -135,6 +145,7 @@ class NoiseCard extends StatelessWidget {
                             offset: Offset(0, 0), // 影の位置 (x, y)
                           ),
                         ],
+
                       ),
                       child: Column(
                         children: [
@@ -155,7 +166,9 @@ class NoiseCard extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),
+
                                   color: Colors.white,
+
 
                                 ),
                                 child: Column(
@@ -188,6 +201,7 @@ class NoiseCard extends StatelessWidget {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
+
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
@@ -197,6 +211,7 @@ class NoiseCard extends StatelessWidget {
                             offset: Offset(0, 0), // 影の位置 (x, y)
                           ),
                         ],
+
                       ),
                       child: Column(
                         children: [
@@ -217,7 +232,7 @@ class NoiseCard extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),
-                                  color: Colors.white,
+                                  color: Color(0xffFEF6E4),
                                 ),
                                 child: Column(
                                   children: [
@@ -354,6 +369,8 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
       children: [
         NoiseCard(
 
+
+          
           subTitle1: '最大dB値(dB)',
           subTitle2: '検知回数(回)',
           subTitle3: '',
@@ -378,6 +395,7 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
                   spreadRadius: 1.0, // 影の広がり
                   blurRadius: 1.0, // 影のぼかし
                   offset: Offset(0, 0), // 影の位置 (x, y)
+
                 ),
               ],
             ),
