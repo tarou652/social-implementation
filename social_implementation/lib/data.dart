@@ -427,13 +427,13 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
                           BarChartData(
 
                             barGroups: [
-                              BarChartGroupData(x: 0, barRods: [BarChartRodData(y: 67, colors: [Colors.blue])]),
-                              BarChartGroupData(x: 1, barRods: [BarChartRodData(y: 44, colors: [Colors.blue])]),
-                              BarChartGroupData(x: 2, barRods: [BarChartRodData(y: 53, colors: [Colors.blue])]),
-                              BarChartGroupData(x: 3, barRods: [BarChartRodData(y: 37, colors: [Colors.blue])]),
-                              BarChartGroupData(x: 4, barRods: [BarChartRodData(y: 66, colors: [Colors.blue])]),
-                              BarChartGroupData(x: 5, barRods: [BarChartRodData(y: 54, colors: [Colors.blue])]),
-                              BarChartGroupData(x: 6, barRods: [BarChartRodData(y: 40, colors: [Colors.blue])]),
+                              BarChartGroupData(x: 0, barRods: [BarChartRodData(y: Aweeknum[6].toDouble(), colors: [Colors.blue])]),
+                              BarChartGroupData(x: 1, barRods: [BarChartRodData(y: Aweeknum[5].toDouble(), colors: [Colors.blue])]),
+                              BarChartGroupData(x: 2, barRods: [BarChartRodData(y: Aweeknum[4].toDouble(), colors: [Colors.blue])]),
+                              BarChartGroupData(x: 3, barRods: [BarChartRodData(y: Aweeknum[3].toDouble(), colors: [Colors.blue])]),
+                              BarChartGroupData(x: 4, barRods: [BarChartRodData(y: Aweeknum[2].toDouble(), colors: [Colors.blue])]),
+                              BarChartGroupData(x: 5, barRods: [BarChartRodData(y: Aweeknum[1].toDouble(), colors: [Colors.blue])]),
+                              BarChartGroupData(x: 6, barRods: [BarChartRodData(y: Aweeknum[0].toDouble(), colors: [Colors.blue])]),
                             ],
                             titlesData: FlTitlesData(
                               leftTitles: SideTitles(
