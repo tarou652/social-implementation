@@ -8,7 +8,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'dart:io';
-
+import 'dart:math';
 void main() {
   runApp(Myapp());
 }
@@ -99,6 +99,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
     bitRate: 64000,
     numChannels: 2,
   );
+  int Reference =60;
   List<String> AutodbList=[];
   List<String> dbList=[];
   AudioPlayer audioPlayer = AudioPlayer();
@@ -203,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
     final sound = _amplitude?.current ?? -160.0;
     final Sound = (sound + 77).toInt();
     print("${sound}db");
-    if(Sound > 0 && !_oversound &&_isAuto){
+    if(Sound > Reference && !_oversound &&_isAuto){
       //oversoundをTrueにすることで生成してすぐに消すコードをとめるようにする
       _oversound=true;
 
@@ -697,7 +698,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
                       itemBuilder: (context, index) {
                         String dB = index < AutodbList.length ? AutodbList[index] : 'Null';
                         if(dB!="Null"){
-                          List<String> parts = AutodbList[index].split(',');
+                          List<String> parts = AutodbList[AutodbList.length - index - 1].split(',');
                           dB=parts[1];
                         }
                         String fileName = index < Autofiles.length
@@ -769,7 +770,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
                       itemBuilder: (context, index) {
                         String dB = index < dbList.length ? dbList[index] : 'Null';
                         if(dB!="Null"){
-                          List<String> parts = dbList[index].split(',');
+                          List<String> parts = dbList[dbList.length - index - 1].split(',');
                           dB=parts[1];
                         }
                         String fileName = index < files.length
