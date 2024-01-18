@@ -21,9 +21,17 @@ class DataPage extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('騒音対策'),
+          backgroundColor: Color(0xffFEF6E4),
         ),
-        body: SingleChildScrollView(
-          child: AppBody(),
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: AppBody(),
+              ),
+            ),
+            Footer(currentIndex: 1,context: context,),
+          ],
         ),
       ),
     );
@@ -44,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: Header(text: "解析"),
       backgroundColor: Color.fromRGBO(254, 246, 228, 1),
       body: Container(
+
       ),
 
     );
@@ -55,9 +64,10 @@ class AppBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(254, 246, 228, 1),
-      //padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(16.0),
       child: Column(
         children: [
+
           // NoiseCard(
           //   title: '昨夜の睡眠dB値',
           //   subTitle1: '最大dB値(dB)',
@@ -67,7 +77,7 @@ class AppBody extends StatelessWidget {
           SizedBox(height: 16.0),
           SevenDaysChart(title: '過去7日間'),
           SizedBox(height: 16.0),
-          Footer(currentIndex: 1,context: context,),
+
         ],
       ),
     );
@@ -75,14 +85,14 @@ class AppBody extends StatelessWidget {
 }
 
 class NoiseCard extends StatelessWidget {
-  final String title;
+
   final String subTitle1;
   final String subTitle2;
   final String subTitle3;
   final int Maxdb;
   final int Sumfile;
   const NoiseCard({
-    required this.title,
+
     required this.subTitle1,
     required this.subTitle2,
     required this.subTitle3,
@@ -96,37 +106,35 @@ class NoiseCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
+      elevation: 0,
       child: Container(
-        height: 300.0,
+        height: 200.0,
         width: double.infinity,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 2.0),
-          borderRadius: BorderRadius.circular(15.0),
-          
+          color: Color.fromRGBO(254, 246, 228, 1),
+
         ),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
-              ),
-            ),
-            Row(
+        child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(right: 8.0),
                     child: Container(
                       height: 200.0,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 2.0),
                         borderRadius: BorderRadius.circular(15.0),
                         color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1), // 影の色と透明度
+                            spreadRadius: 1.0, // 影の広がり
+                            blurRadius: 1.0, // 影のぼかし
+                            offset: Offset(0, 0), // 影の位置 (x, y)
+                          ),
+                        ],
                       ),
                       child: Column(
                         children: [
@@ -134,7 +142,7 @@ class NoiseCard extends StatelessWidget {
                             alignment: Alignment.topLeft,
                              child: Text(
                                 subTitle1,
-                                style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                               style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
 
                             ),
                           ),
@@ -148,6 +156,7 @@ class NoiseCard extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),
                                   color: Colors.white,
+
                                 ),
                                 child: Column(
                                   children: [
@@ -155,7 +164,8 @@ class NoiseCard extends StatelessWidget {
                                       alignment: Alignment.topLeft,
                                       child: Text(
                                         "$Maxdb",
-                                        style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                                        style: TextStyle(fontSize: 90.0, color: Color.fromRGBO(
+                                            255, 123, 123, 1.0)),
                                       ),
                                     ),
                                   ],
@@ -172,14 +182,21 @@ class NoiseCard extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: Container(
                       height: 200.0,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 2.0),
                         borderRadius: BorderRadius.circular(15.0),
                         color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1), // 影の色と透明度
+                            spreadRadius: 1.0, // 影の広がり
+                            blurRadius: 1.0, // 影のぼかし
+                            offset: Offset(0, 0), // 影の位置 (x, y)
+                          ),
+                        ],
                       ),
                       child: Column(
                         children: [
@@ -187,7 +204,7 @@ class NoiseCard extends StatelessWidget {
                             alignment: Alignment.topLeft,
                             child: Text(
                               subTitle2,
-                              style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                              style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
 
                             ),
                           ),
@@ -208,7 +225,8 @@ class NoiseCard extends StatelessWidget {
                                       alignment: Alignment.topLeft,
                                       child: Text(
                                         "$Sumfile",
-                                        style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                                        style: TextStyle(fontSize: 90.0, color: Color.fromRGBO(
+                                            110, 110, 124, 1.0)),
                                       ),
                                     ),
                                   ],
@@ -223,17 +241,10 @@ class NoiseCard extends StatelessWidget {
                 ),
               ],
             ),
-          ],
         ),
-      ),
     );
   }
 }
-
-
-
-
-
 
 
 
@@ -338,10 +349,11 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         NoiseCard(
-          title: '昨日からのdB値',
+
           subTitle1: '最大dB値(dB)',
           subTitle2: '検知回数(回)',
           subTitle3: '',
@@ -349,89 +361,111 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
           Sumfile: SumFile,
         ),
         // Rest of your code...
+        SizedBox(height: 20),
         Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Container(
-        height: 700.0,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white, width: 2.0),
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "過去７日間",
-                style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
-              ),
-            ),
-            SizedBox(height: 10),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '以下のグラフは、過去７日間の検知回数のデータです。',
-                  style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Container(
+            height: 700.0,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // 影の色と透明度
+                  spreadRadius: 1.0, // 影の広がり
+                  blurRadius: 1.0, // 影のぼかし
+                  offset: Offset(0, 0), // 影の位置 (x, y)
                 ),
-              ),
+              ],
             ),
-            SizedBox(height: 10),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: BarChart(
-                  BarChartData(
-                    barGroups: [
-                      BarChartGroupData(x: 0, barRods: [BarChartRodData(y: Aweeknum[6].toDouble(), colors: [Colors.blue])]),
-                      BarChartGroupData(x: 1, barRods: [BarChartRodData(y: Aweeknum[5].toDouble(), colors: [Colors.blue])]),
-                      BarChartGroupData(x: 2, barRods: [BarChartRodData(y: Aweeknum[4].toDouble(), colors: [Colors.blue])]),
-                      BarChartGroupData(x: 3, barRods: [BarChartRodData(y: Aweeknum[3].toDouble(), colors: [Colors.blue])]),
-                      BarChartGroupData(x: 4, barRods: [BarChartRodData(y: Aweeknum[2].toDouble(), colors: [Colors.blue])]),
-                      BarChartGroupData(x: 5, barRods: [BarChartRodData(y: Aweeknum[1].toDouble(), colors: [Colors.blue])]),
-                      BarChartGroupData(x: 6, barRods: [BarChartRodData(y: Aweeknum[0].toDouble(), colors: [Colors.blue])]),
-                    ],
-                    titlesData: FlTitlesData(
-                      leftTitles: SideTitles(showTitles: true),
-                      bottomTitles: SideTitles(
-                        showTitles: true,
-                        interval: 1,
-                        getTitles: (value) {
-                          switch (value.toInt()) {
-                            case 0:
-                              return '6日前';
-                            case 1:
-                              return '5日前';
-                            case 2:
-                              return '4日前';
-                            case 3:
-                              return '3日前';
-                            case 4:
-                              return '一昨日';
-                            case 5:
-                              return '昨日';
-                            case 6:
-                              return '今日';
-                            default:
-                              return '';
-                          }
-                        },
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "過去７日間",
+                        style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
                       ),
                     ),
-                    borderData: FlBorderData(show: true),
-                    gridData: FlGridData(show: true),
-                  ),
+                    SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '以下のグラフは、過去７日間の検知回数のデータです。',
+                          style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: BarChart(
+
+                          BarChartData(
+
+                            barGroups: [
+                              BarChartGroupData(x: 0, barRods: [BarChartRodData(y: 67, colors: [Colors.blue])]),
+                              BarChartGroupData(x: 1, barRods: [BarChartRodData(y: 44, colors: [Colors.blue])]),
+                              BarChartGroupData(x: 2, barRods: [BarChartRodData(y: 53, colors: [Colors.blue])]),
+                              BarChartGroupData(x: 3, barRods: [BarChartRodData(y: 37, colors: [Colors.blue])]),
+                              BarChartGroupData(x: 4, barRods: [BarChartRodData(y: 66, colors: [Colors.blue])]),
+                              BarChartGroupData(x: 5, barRods: [BarChartRodData(y: 54, colors: [Colors.blue])]),
+                              BarChartGroupData(x: 6, barRods: [BarChartRodData(y: 40, colors: [Colors.blue])]),
+                            ],
+                            titlesData: FlTitlesData(
+                              leftTitles: SideTitles(
+                                showTitles: true,
+                                getTitles: (value) {
+                                  if (value % 5 == 0) {
+                                    return value.toInt().toString();
+                                  } else {
+                                    return '';
+                                  }
+                                },
+
+                              ),
+
+                              bottomTitles: SideTitles(
+                                showTitles: true,
+                                interval: 1,
+                                getTitles: (value) {
+                                  switch (value.toInt()) {
+                                    case 0:
+                                      return '6日前';
+                                    case 1:
+                                      return '5日前';
+                                    case 2:
+                                      return '4日前';
+                                    case 3:
+                                      return '3日前';
+                                    case 4:
+                                      return '一昨日';
+                                    case 5:
+                                      return '昨日';
+                                    case 6:
+                                      return '今日';
+                                    default:
+                                      return '';
+                                  }
+                                },
+                              ),
+                            ),
+                            borderData: FlBorderData(show: true),
+                            gridData: FlGridData(show: true),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    ),
-    ]
+        ],
     );
   }}
