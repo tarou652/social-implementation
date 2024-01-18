@@ -80,7 +80,7 @@ class AppBody extends StatelessWidget {
           SevenDaysChart(title: '過去7日間'),
           SizedBox(height: 16.0),
 
-          Footer(currentIndex: 1,context: context,),
+
 
 
         ],
@@ -201,7 +201,6 @@ class NoiseCard extends StatelessWidget {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
-
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
@@ -232,7 +231,7 @@ class NoiseCard extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),
-                                  color: Color(0xffFEF6E4),
+                                  color: Colors.white,
                                 ),
                                 child: Column(
                                   children: [
