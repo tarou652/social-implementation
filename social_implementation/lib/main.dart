@@ -486,12 +486,16 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
 
     // 再生開始
     await audioPlayer.play(DeviceFileSource(localFile));
-    // 再生終了後、ステータス変更
+    /* 再生終了後、ステータス変更
     audioPlayer.onPlayerComplete.listen((event) {
       setState(() {
         _playingStatus = false;
       });
+
     });
+
+     */
+    audioPlayer.setReleaseMode(ReleaseMode.loop);
 
   }
 
