@@ -19,10 +19,8 @@ class DataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('騒音対策'),
-          backgroundColor: Color(0xffFEF6E4),
-        ),
+        appBar: Header(text: "騒音対策"),
+        backgroundColor: Color(0xffFEF6E4),
         body: Column(
           children: [
             Expanded(
@@ -153,7 +151,7 @@ class NoiseCard extends StatelessWidget {
                             alignment: Alignment.topLeft,
                              child: Text(
                                 subTitle1,
-                               style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                               style: TextStyle(fontSize: 25.0, color: Color.fromRGBO(0, 24, 88, 1)),
 
                             ),
                           ),
@@ -177,7 +175,7 @@ class NoiseCard extends StatelessWidget {
                                       alignment: Alignment.topLeft,
                                       child: Text(
                                         "$Maxdb",
-                                        style: TextStyle(fontSize: 90.0, color: Color.fromRGBO(
+                                        style: TextStyle(fontSize: 80.0, color: Color.fromRGBO(
                                             255, 123, 123, 1.0)),
                                       ),
                                     ),
@@ -218,7 +216,7 @@ class NoiseCard extends StatelessWidget {
                             alignment: Alignment.topLeft,
                             child: Text(
                               subTitle2,
-                              style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                              style: TextStyle(fontSize: 25.0, color: Color.fromRGBO(0, 24, 88, 1)),
 
                             ),
                           ),
@@ -239,7 +237,7 @@ class NoiseCard extends StatelessWidget {
                                       alignment: Alignment.topLeft,
                                       child: Text(
                                         "$Sumfile",
-                                        style: TextStyle(fontSize: 90.0, color: Color.fromRGBO(
+                                        style: TextStyle(fontSize: 80.0, color: Color.fromRGBO(
                                             110, 110, 124, 1.0)),
                                       ),
                                     ),
