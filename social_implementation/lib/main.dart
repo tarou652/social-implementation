@@ -26,6 +26,42 @@ class Myapp extends StatelessWidget {
     );
   }
 }
+
+class RecordingStatusWidget extends StatelessWidget {
+  final bool isRecording;
+  final String statusText;
+  final Color backgroundColor;
+
+  RecordingStatusWidget({
+    required this.isRecording,
+    required this.statusText,
+    required this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return isRecording
+        ? Container(
+      padding: EdgeInsets.all(8.0),
+      color: backgroundColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            statusText,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+    )
+        : SizedBox(); // 録音中でない場合は空のウィジェット
+  }
+}
+
 void deleteFilesInDirectory(String directoryPath) {
   Directory directory = Directory(directoryPath);
 
@@ -146,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
       setState(() => _amplitude = amp);
       judge(true,true);
 
-  });}
+    });}
   @override
   void dispose() {
     _tabController?.dispose();
@@ -312,7 +348,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
     DateTime now = DateTime.now();
     final txtfile = File('$dbFolderPath/$now,$_Maxsound');
     if (!await txtfile.exists()) {
-    await txtfile.create();
+      await txtfile.create();
     }
     print("$dbPathsこれはdbのパス一蘭");
     setState(() {_Setfiles();});
@@ -376,7 +412,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
     final historyFolderPath = '${directory.path}/history';
     final historyDirectory = Directory(historyFolderPath);
     final historypaths = historyDirectory.listSync();
-     itizilist =[];
+    itizilist =[];
     for (var file in historypaths) {
       String fileName = basename(file.path);
       itizilist.add(fileName);
@@ -526,7 +562,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
       }
     });
   }
-
+  bool IsStart=false;
   void _startTimer(bool IsAuto) {
 
     setState(() {
@@ -537,10 +573,12 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
       }
 
       if (_isStart || _isAutoStart) {
+        IsStart=true;
         _startTime = DateTime.now();
         _timer  = Timer.periodic(Duration(seconds: 1), _onTimer);
       } else {
         _timer.cancel();
+        IsStart=false;
       }
     });
   }
@@ -565,277 +603,175 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
   String _convertTwoDigits(int number) {
     return number >= 10 ? "$number" : "0$number";
   }
-  //再生中に表示するウィジェット
-  Widget _buildPlaybackWidget() {
-    List<Widget> playbackWidgets = [];
+  //録音中に表示するウィジェット
 
-    _playingStatusMap.forEach((filename, isPlaying) {
-      if (isPlaying) {
-        playbackWidgets.add(
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), // 角を丸くする
-              color: Colors.grey.withOpacity(0.5), // 背景の色
-            ),
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '再生中: $filename',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-    });
-
-    return Column(
-      children: playbackWidgets,
-    );
-  }
   var _isStart = false;
   var _isAutoStart = false;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(text: "録音画面"),
       backgroundColor: Color.fromRGBO(254, 246, 228, 1),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 20),
           Container(
+            height: 60,
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(bottom: 20),
             child: Text(
               _timeString,
               style: TextStyle(fontSize: 60),
             ),
           ),
-
-          SizedBox(height: 20),
-
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _isAutoStart ? Colors.greenAccent.withOpacity(0.5) : Colors.greenAccent,
-                ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(50),
-                  onTap: _isAutoStart
-                      ? null // _isStartがtrueのときはnullを指定してボタンが押せなくなります
-                      : () async {
-                    _startTimer(false);
-                    _recordingHandle();
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 180,
+                    height: 80,
+                    margin: EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(20), // 任意の角の半径を指定
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Center(
+                        child: Text(
+                          '通常録音',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 20,
+                  ),
+                  Container(
+                    width: 100,
+                    height: 100,
+                    margin: EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _isAutoStart ? Color(0xFF4CAF50).withOpacity(0.5) : Color(0xFF4CAF50),
 
-                  },
-                  child: Center(
-                    child: Text(
-                      _isStart ? '停止' : '開始',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(50),
+                      onTap: _isAutoStart
+                          ? null
+                          : () async {
+                        _startTimer(false);
+                        _recordingHandle();
+                      },
+                      child: Center(
+                        child: Text(
+                          _isStart ? '停止' : '開始',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-              SizedBox(width: 32), // ボタン間のスペースを設けるための間隔
               Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _isStart ? Colors.red.withOpacity(0.5) : Colors.red, // 別の色を使用する例
-                ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(50),
-                  onTap: _isStart
-                      ? null // _isStartがtrueのときはnullを指定してボタンが押せなくなります
-                      : () async {
-                    _startTimer(true);
-                    _AutorecordingHandle();
-                  },
-                  child: Center(
-                    child: Text(
-                      _isAutoStart ? '停止' : '開始',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                height: 30, // ボタンとの間隔を設定
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 180,
+                    height: 80,
+                    margin: EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(20), // 任意の角の半径を指定
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Center(
+                        child: Text(
+                          '自動録音',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  Container(
+                    width: 20,
+                  ),
+                  Container(
+                    width: 100,
+                    height: 100,
+                    margin: EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _isStart ? Colors.red.withOpacity(0.5) : Colors.red,
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(50),
+                      onTap: _isStart
+                          ? null
+                          : () async {
+                        _startTimer(true);
+                        _AutorecordingHandle();
+                      },
+                      child: Center(
+                        child: Text(
+                          _isAutoStart ? '停止' : '開始',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              // 他にも必要なボタンがあれば同様に追加
             ],
           ),
-          SizedBox(height: 20),
-
-        Container(
-          child: Text("自動録音のリスト"),
-        ),
-        Flexible(
-           child: Container(
-              child:ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      itemCount: Autofiles.length,
-                      itemBuilder: (context, index) {
-                        String dB = index < AutodbList.length ? AutodbList[index] : 'Null';
-                        if(dB!="Null"){
-                          List<String> parts = AutodbList[AutodbList.length - index - 1].split(',');
-                          dB=parts[1];
-                        }
-                        String fileName = index < Autofiles.length
-                            ? basename(Autofiles[Autofiles.length - index - 1].path)
-                            : '自動録音のファイルが存在しません';
-                        return Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 5.0, horizontal: 20.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10), // 丸くする
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            children: [
-                              ListTile(
-                                title: Text(fileName),
-                                //tileColor: Colors.blue[50],
-                                subtitle: Text('最大デシベル音：${dB}dB'),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        _playingHandle(fileName,true);
-                                      },
-
-                                      style: ElevatedButton.styleFrom(
-                                        shape: const CircleBorder(),
-                                        primary: Colors.transparent,
-                                        // ボタンの背景を透明にする
-                                        elevation: 0, // ボタンの影を削除
-                                      ),
-
-                                      child: _playingStatusMap[fileName] ??
-                                          false
-                                          ? const Icon(
-                                          Icons.stop, color: Colors.grey)
-                                          : const Icon(
-                                          Icons.play_arrow, color: Colors.grey),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        _deleteFile(fileName,true);
-                                        Deletedbfile(index,true);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        shape: const CircleBorder(),
-                                        primary: Colors.transparent, // 透明な背景色
-                                        elevation: 0, // ボタンの影を削除
-                                      ),
-                                      child: const Icon(
-                                          Icons.delete, color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),),),
           Container(
-            child: Text("録音のリスト"),
+            height: 60,
           ),
-        Flexible(
-            child: Container(
-                child:ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      itemCount: files.length,
-                      itemBuilder: (context, index) {
-                        String dB = index < dbList.length ? dbList[index] : 'Null';
-                        if(dB!="Null"){
-                          List<String> parts = dbList[dbList.length - index - 1].split(',');
-                          dB=parts[1];
-                        }
-                        String fileName = index < files.length
-                            ? basename(files[files.length - index - 1].path)
-                            : 'Miss file';
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10), // 丸くする
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            children: [
-                              ListTile(
-                                title: Text(fileName),
-                                //tileColor: Colors.blue[50],
-                                subtitle: Text('最大デシベル音：${dB}dB'),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        _playingHandle(fileName,false);
-                                      },
+          Expanded(
+            child: RecordingStatusWidget(
+              isRecording: _recordingStatus || _AutorecordingStatus,
+              statusText: _recordingStatus ? '通常録音中(画面遷移できません)' : (_AutorecordingStatus ? '自動録音中(画面遷移できません)' : ''),
+              backgroundColor: _recordingStatus
+                  ? Colors.green // 録音中は緑色
+                  : (_AutorecordingStatus ? Colors.red : Colors.transparent), // 自動録音中は赤色
+            ),
+          ),
 
-                                      style: ElevatedButton.styleFrom(
-                                        shape: const CircleBorder(),
-                                        primary: Colors.transparent, // ボタンの背景を透明にする
-                                        elevation: 0, // ボタンの影を削除
-                                      ),
-
-                                      child: _playingStatusMap[fileName] ?? false
-                                          ? const Icon(Icons.stop, color: Colors.grey)
-                                          : const Icon(Icons.play_arrow, color: Colors.grey),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        _deleteFile(fileName,false);
-                                        Deletedbfile(index,false);                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        shape: const CircleBorder(),
-                                        primary: Colors.transparent, // 透明な背景色
-                                        elevation: 0, // ボタンの影を削除
-                                      ),
-                                      child: const Icon(Icons.delete, color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-            ),),
-
-          _buildPlaybackWidget(), // ここで再生中のウィジェットを表示
         ],
       ),
-      bottomNavigationBar:Footer(currentIndex: 0,context: context),
+      bottomNavigationBar:Footer(currentIndex: 0,context: context,isStart:IsStart),
     );
   }
+
 
 }

@@ -28,7 +28,7 @@ class DataPage extends StatelessWidget {
                 child: AppBody(),
               ),
             ),
-            Footer(currentIndex: 2,context: context,),
+            Footer(currentIndex: 2,context: context,isStart: false,),
           ],
         ),
       ),
@@ -365,11 +365,8 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
     return Column(
       children: [
         NoiseCard(
-
-
-          
-          subTitle1: '最大dB値(dB)',
-          subTitle2: '検知回数(回)',
+          subTitle1: ' 最大dB値(dB)',
+          subTitle2: ' 検知回数(回)',
           subTitle3: '',
           Maxdb: Maxdb,
           Sumfile: SumFile,
@@ -399,7 +396,7 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
                 child: Column(
                   children: [
                     Align(
-                      alignment: Alignment.topLeft,
+                      alignment: Alignment.center,
                       child: Text(
                         "過去７日間",
                         style: TextStyle(fontSize: 30.0, color: Color.fromRGBO(0, 24, 88, 1)),
