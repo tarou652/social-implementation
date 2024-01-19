@@ -19,10 +19,8 @@ class DataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('騒音対策'),
-          backgroundColor: Color(0xffFEF6E4),
-        ),
+        appBar: Header(text: "騒音対策"),
+        backgroundColor: Color(0xffFEF6E4),
         body: Column(
           children: [
             Expanded(
