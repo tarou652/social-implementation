@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ExpansionTile(
             title: Text(
                 '録音履歴について',
-                style: TextStyle(color: Color(0xff001858)),
+                style: TextStyle(fontSize: 20.0, color: Color(0xff001858)),
             ),
             children: <Widget>[
               Padding(
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ExpansionTile(
             title: Text(
                 '時間設定について',
-                style: TextStyle(color: Color(0xff001858)),
+                style: TextStyle(fontSize: 20.0, color: Color(0xff001858)),
             ),
             children: <Widget>[
               Padding(
@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ExpansionTile(
             title: Text(
                 '録音画面について',
-                style: TextStyle(color: Color(0xff001858)),
+                style: TextStyle(fontSize: 20.0, color: Color(0xff001858)),
             ),
             children: <Widget>[
               Padding(
@@ -119,9 +119,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     Expanded(
                       child: Text(
                         '録音画面では、音声の録音を行います。\n'
-                        'ユーザーが開始ボタンを押すと録音が開始され上部に経過秒数と音のノイズが表示されます。\n'
-                        '録音機能を使用するにはマイクの許可をしてください。\n',
-                        style: TextStyle(color: Color(0xff001858)),
+                        'ユーザーが開始ボタンを押すと録音が開始され上部に経過秒数が表示されます。\n'
+                        '\n'
+                        '緑の開始ボタンは通常録音のボタンであり、開始ボタンが押されて停止ボタンが押されるまでの音声を録音します。\n'
+                            '\n'
+                        '赤の開始ボタンは自動録音のボタンであり、ユーザーが開始ボタンを押すと10秒の録音を開始します。10秒間で規定のdB値を超えなければそのデータは破棄され、超えたら保存されます。これを停止ボタンが押されるまで続きます。\n'
+                        ,
+                        style: TextStyle( color: Color(0xff001858)),
                       ),
                     ),
                     SizedBox(width: 30.0),

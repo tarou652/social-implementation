@@ -381,7 +381,7 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Container(
-            height: 700.0,
+            height: 500.0,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
