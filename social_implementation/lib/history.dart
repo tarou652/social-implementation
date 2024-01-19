@@ -510,6 +510,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
   void _pausePlaying() async {
     await audioPlayer.pause();
   }
+  bool Isplay=false;
   // 再生の開始停止
   void _playingHandle(String filename,_isAuto) {
     print(filename);
@@ -523,46 +524,14 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
 
       if (_playingStatusMap[filename]!) {
         _startPlaying(filename,_isAuto);
+        Isplay=true;
       } else {
         _pausePlaying();
+        Isplay=false;
       }
     });
   }
 
-  void _startTimer(bool IsAuto) {
-
-    setState(() {
-      if(IsAuto){
-        _isAutoStart=!_isAutoStart;
-      }else{
-        _isStart = !_isStart;
-      }
-
-      if (_isStart || _isAutoStart) {
-        _startTime = DateTime.now();
-        _timer  = Timer.periodic(Duration(seconds: 1), _onTimer);
-      } else {
-        _timer.cancel();
-      }
-    });
-  }
-
-  void _onTimer(Timer timer) {
-    /// 現在時刻を取得
-    var now = DateTime.now();
-    /// 開始時刻と比較して差分を取得
-    var diff = now.difference(_startTime).inSeconds;
-
-    /// タイマーのロジック
-    var hour = (diff / (60 * 60)).floor();
-    var mod = diff % (60 * 60);
-    var minutes = (mod / 60).floor();
-    var second = mod % 60;
-
-    setState(() => {
-      _timeString = """${_convertTwoDigits(hour)}:${_convertTwoDigits(minutes)}:${_convertTwoDigits(second)}"""
-    });
-  }
 
   String _convertTwoDigits(int number) {
     return number >= 10 ? "$number" : "0$number";
@@ -798,7 +767,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
           _buildPlaybackWidget(), // ここで再生中のウィジェットを表示
         ],
       ),
-      bottomNavigationBar: Footer(currentIndex: 1, context: context,isStart: false,),
+      bottomNavigationBar: Footer(currentIndex: 1, context: context,isStart: Isplay,),
     );
   }
 }
