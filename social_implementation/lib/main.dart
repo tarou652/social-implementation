@@ -562,7 +562,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
       }
     });
   }
-
+  bool IsStart=false;
   void _startTimer(bool IsAuto) {
 
     setState(() {
@@ -573,10 +573,12 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
       }
 
       if (_isStart || _isAutoStart) {
+        IsStart=true;
         _startTime = DateTime.now();
         _timer  = Timer.periodic(Duration(seconds: 1), _onTimer);
       } else {
         _timer.cancel();
+        IsStart=false;
       }
     });
   }
@@ -767,7 +769,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
 
         ],
       ),
-      bottomNavigationBar: Footer(currentIndex: 0, context: context),
+      bottomNavigationBar:Footer(currentIndex: 0,context: context,isStart:IsStart),
     );
   }
 

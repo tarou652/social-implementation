@@ -754,7 +754,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
           _buildPlaybackWidget(), // ここで再生中のウィジェットを表示
         ],
       ),
-      bottomNavigationBar: Footer(currentIndex: 1, context: context),
+      bottomNavigationBar: Footer(currentIndex: 1, context: context,isStart: false,),
     );
   }
 }
