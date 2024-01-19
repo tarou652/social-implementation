@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ExpansionTile(
             title: Text(
-                '時間設定について',
+                '履歴画面について',
                 style: TextStyle(color: Color(0xff001858)),
             ),
             children: <Widget>[
@@ -88,9 +88,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Expanded(
                       child: Text(
-                        '時間設定では、ユーザーが時間を設定することでその時間に自動録音を開始することができます。\n'
-                        'また以前の録音時間が保存されるので、履歴からオンオフで同じ時間の録音が可能になります。\n'
-                        '自動録音機能をご使用になる場合は、自動録音の許可をしてください。\n',
+                        '録音されたファイルは、新着順に一覧で表示されます。\n'
+                        '再生ボタンを押すことで、選択した録音ファイルの再生が開始されます。\n'
+                        '削除ボタンを押すことで、選択された録音ファイルが削除されます。\n'
+                        '録音された騒音の最大dB値が表示されます。\n',
                         style: TextStyle(color: Color(0xff001858)),
                       ),
                     ),
