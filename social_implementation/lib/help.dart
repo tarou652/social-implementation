@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ExpansionTile(
             title: Text(
-                '時間設定について',
+                '履歴画面について',
                 style: TextStyle(fontSize: 20.0, color: Color(0xff001858)),
             ),
             children: <Widget>[
