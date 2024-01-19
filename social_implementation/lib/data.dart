@@ -112,7 +112,7 @@ class NoiseCard extends StatelessWidget {
       ),
       elevation: 0,
       child: Container(
-        height: 200.0,
+        height: 150.0,
         width: double.infinity,
 
         decoration: BoxDecoration(
@@ -129,7 +129,7 @@ class NoiseCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Container(
-                      height: 200.0,
+                      height: 150.0,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
@@ -151,14 +151,14 @@ class NoiseCard extends StatelessWidget {
                             alignment: Alignment.topLeft,
                              child: Text(
                                 subTitle1,
-                               style: TextStyle(fontSize: 25.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                               style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
 
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Padding(
-                              padding: const EdgeInsets.all(10.0),
+                              padding: const EdgeInsets.all(1.0),
                               child: Container(
                                 height: 150.0,
                                 width: double.infinity,
@@ -195,7 +195,7 @@ class NoiseCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Container(
-                      height: 200.0,
+                      height: 150.0,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
@@ -216,14 +216,14 @@ class NoiseCard extends StatelessWidget {
                             alignment: Alignment.topLeft,
                             child: Text(
                               subTitle2,
-                              style: TextStyle(fontSize: 25.0, color: Color.fromRGBO(0, 24, 88, 1)),
+                              style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 24, 88, 1)),
 
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Padding(
-                              padding: const EdgeInsets.all(10.0),
+                              padding: const EdgeInsets.all(1.0),
                               child: Container(
                                 height: 150.0,
                                 width: double.infinity,
