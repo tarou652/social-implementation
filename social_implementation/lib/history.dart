@@ -556,7 +556,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '再生中: $filename',
+                        '再生中: $filename(画面遷移できません)',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
