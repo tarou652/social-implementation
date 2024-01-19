@@ -30,7 +30,7 @@ class DataPage extends StatelessWidget {
                 child: AppBody(),
               ),
             ),
-            Footer(currentIndex: 1,context: context,),
+            Footer(currentIndex: 2,context: context,),
           ],
         ),
       ),

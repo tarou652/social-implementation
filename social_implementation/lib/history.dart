@@ -252,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _buildPlaybackWidget(), // ここで再生中のウィジェットを表示
         ],
       ),
-      bottomNavigationBar: Footer(currentIndex: 2, context: context),
+      bottomNavigationBar: Footer(currentIndex: 1, context: context),
     );
   }
 }

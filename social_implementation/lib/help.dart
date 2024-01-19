@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      bottomNavigationBar:Footer(currentIndex: 2,context: context),
+      bottomNavigationBar:Footer(currentIndex: 3,context: context),
     );
   }
 
