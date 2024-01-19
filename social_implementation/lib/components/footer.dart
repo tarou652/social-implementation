@@ -7,13 +7,18 @@ import 'package:SI/help.dart';
 class Footer extends StatelessWidget implements PreferredSizeWidget {
   final int currentIndex;
   final BuildContext context;
-  Footer({required this.currentIndex, required this.context});
+  final bool isStart;
+  Footer({required this.currentIndex, required this.context,required this.isStart});
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (int index) {
+        if (isStart) {
+          // If _isAutoStart is true, immediately return without doing anything
+          return;
+        }
         // インデックスに基づいて画面を遷移する
         if (index == 0) {
           // 録音画面に遷移

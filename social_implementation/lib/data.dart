@@ -28,7 +28,7 @@ class DataPage extends StatelessWidget {
                 child: AppBody(),
               ),
             ),
-            Footer(currentIndex: 2,context: context,),
+            Footer(currentIndex: 2,context: context,isStart: false,),
           ],
         ),
       ),
@@ -433,13 +433,13 @@ class _SevenDaysChartState extends State<SevenDaysChart> {
                             titlesData: FlTitlesData(
                               leftTitles: SideTitles(
                                 showTitles: true,
-                                //getTitles: (value) {
-                                 // if (value % 5 == 0) {
-                                 //   return value.toInt().toString();
-                                 // } else {
-                                 //   return '';
-                                 // }
-                                //},
+                                getTitles: (value) {
+                                  if (value % 5 == 0) {
+                                   return value.toInt().toString();
+                                 } else {
+                                    return '';
+                                  }
+                                },
 
                               ),
 
