@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
     <application
-        android:label="social_implementation"
+        android:label="sleeper"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
