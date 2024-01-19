@@ -146,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(15.0),
                 child: GestureDetector(
                   onTap: () {
-                    _launchURL('https://forms.office.com/pages/responsepage.aspx?id=XYP-cpVeEkWK4KezivJfyMCO0vGn8KlHnna6XBkyMlBUMjBNMlJEWjlVQTZLTUhIVDdVOUJKMFdSSS4u'); //URL
+                    _launchURL('https://forms.office.com/r/yrtF0YnDb3'); //URL
                   },
                   child: RichText(
                     text: TextSpan(
