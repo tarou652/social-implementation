@@ -760,7 +760,7 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
           Expanded(
             child: RecordingStatusWidget(
               isRecording: _recordingStatus || _AutorecordingStatus,
-              statusText: _recordingStatus ? '通常録音中' : (_AutorecordingStatus ? '自動録音中' : ''),
+              statusText: _recordingStatus ? '通常録音中(画面遷移できません)' : (_AutorecordingStatus ? '自動録音中(画面遷移できません)' : ''),
               backgroundColor: _recordingStatus
                   ? Colors.green // 録音中は緑色
                   : (_AutorecordingStatus ? Colors.red : Colors.transparent), // 自動録音中は赤色

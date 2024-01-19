@@ -616,6 +616,28 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
       backgroundColor: Color.fromRGBO(254, 246, 228, 1),
       body: Column(
         children: [
+          Container(
+            width: 180,
+            height: 40,
+            margin: EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(20), // 任意の角の半径を指定
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(50),
+              child: Center(
+                child: Text(
+                  '通常録音',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
           Flexible(
             child: Container(
               child:ListView.builder(
@@ -682,6 +704,28 @@ class _MyHomePageState extends State<MyHomePage>with SingleTickerProviderStateMi
             ),
           ),
           SizedBox(height: 20),
+          Container(
+            width: 180,
+            height: 40,
+            margin: EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(20), // 任意の角の半径を指定
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(50),
+              child: Center(
+                child: Text(
+                  '自動録音',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
           Flexible(
             child: Container(
               child:ListView.builder(
